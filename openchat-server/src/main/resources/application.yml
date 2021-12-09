@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: openchat
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework: INFO
+  file:
+    name: /var/log/openchat/server.log
+    max-size: 50MB
+
+application:
+  idgen:
+    datacenter: 1
+    worker: 1
+

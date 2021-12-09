@@ -1,0 +1,60 @@
+package top.mikecao.openchat.client;
+
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import top.mikecao.openchat.client.handler.ClientHandler;
+import top.mikecao.pchat.toolset.ssl.KeyCertStore;
+
+import java.io.IOException;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+public class Client {
+    public static void main(String[] args) throws InterruptedException, KeyStoreException,
+            UnrecoverableEntryException, NoSuchAlgorithmException, IOException, CertificateException {
+
+        KeyCertStore store = new KeyCertStore("top.mikecao.pchat.pc.keystore","top.mikecao.pchat.pc");
+        PrivateKey pk = store.key("top.mikecao.pchat.pc","top.mikecao.pchat.pc");
+        X509Certificate x509Certificate = store.certificate("top.mikecao.pchat.pc");
+        X509Certificate trustX509Certificate = store.certificate("top.mikecao.pchat.server");
+
+        SslContext sslCtx = SslContextBuilder.forClient()
+                .keyManager(pk, x509Certificate)
+                .trustManager(trustX509Certificate).build();
+        String host = "localhost";
+        int port = 8888;
+        EventLoopGroup work = new NioEventLoopGroup();
+        try{
+            Bootstrap bootstrap = new Bootstrap();
+            bootstrap.group(work)
+                    .channel(NioSocketChannel.class)
+                    .option(ChannelOption.SO_KEEPALIVE, true)
+                    .handler(new ChannelInitializer<Channel>() {
+                        @Override
+                        protected void initChannel(Channel ch) throws Exception {
+                            ch.pipeline()
+                                    .addLast(sslCtx.newHandler(ch.alloc(),host,port))
+                                    .addLast("FrameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,
+                                            0,
+                                            4,
+                                            0,
+                                            0))
+                                    .addLast(new ClientHandler());
+                        }
+                    });
+            ChannelFuture future = bootstrap.connect(host, port).sync();
+            future.channel().closeFuture().sync();
+
+        }finally {
+//            work.shutdownGracefully();
+        }
+    }
+}
+
+
