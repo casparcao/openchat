@@ -1,0 +1,60 @@
+syntax = "proto3";
+//定义protobuf的包名称空间
+option java_package = "top.mikecao.openchat.core.proto";
+// 消息体名称
+option java_outer_classname = "Proto";
+//.....
+
+/*消息*/
+message Message{
+    uint64 id = 1;     //消息id
+    uint64 ts = 2;     //时间戳(单位:毫秒)
+    MsgType type = 3;  //消息类型
+    string token = 4;  //请求的令牌
+    oneof content {
+        LoginRequest login = 5;
+        string json = 6;
+        Response response = 7;
+        Chat chat = 8;
+    } //消息内容
+}
+
+enum MsgType {
+    LOGIN = 0; //登录
+    LOGOUT = 1; //登出
+    P2P = 2; //单聊
+    P2G = 3; //群聊
+    BROADCAST = 4; //广播
+    JSON = 5; //json格式的可拓展内容，具体数据格式由业务绝对
+}
+
+message Chat {
+    uint64 from = 1;
+    uint64 to = 2; //接收方id(用户，群组）
+    uint64 at = 3; //@对方id
+    ChatType type = 4;
+    string message = 5;
+}
+
+enum ChatType {
+    /** 文本 */
+    TEXT = 0;
+    /** 表情 */
+    EMOJI = 1;
+    /** 图片 */
+    IMAGE = 2;
+    /** 代码 */
+    CODE = 3;
+    /** 富文本 */
+    RTF = 4;
+}
+
+message LoginRequest {
+    string account = 1;
+    string passwd = 2;
+}
+
+message Response {
+    uint32 code = 1;
+    string message = 2;
+}

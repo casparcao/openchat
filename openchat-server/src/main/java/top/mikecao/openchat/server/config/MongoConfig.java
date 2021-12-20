@@ -1,18 +1,11 @@
 package top.mikecao.openchat.server.config;
 
-import com.mongodb.MongoClientOptions;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener;
-import io.micrometer.core.instrument.binder.mongodb.MongoMetricsConnectionPoolListener;
+import com.mongodb.MongoClientSettings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.core.convert.DbRefResolver;
-import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
-import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
-import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author caohailong
@@ -35,28 +28,15 @@ public class MongoConfig {
     private int multiplier;
 
     @Bean
-    public MongoClientOptions mongoClientOptions(MeterRegistry registry){
-        // 配置连接池
-        MongoClientOptions.Builder builder = new MongoClientOptions.Builder();
-        builder.connectionsPerHost(maxConnectionsPerHost);
-        builder.minConnectionsPerHost(minConnectionsPerHost);
-        builder.maxWaitTime(maxWaitTime);
-        builder.connectTimeout(connectTimeout);
-        builder.socketTimeout(socketTimeout);
-        builder.threadsAllowedToBlockForConnectionMultiplier(multiplier);
-        builder.addConnectionPoolListener(new MongoMetricsConnectionPoolListener(registry));
-        builder.addCommandListener(new MongoMetricsCommandListener(registry));
-        return builder.build();
+    public MongoClientSettings settings(){
+        return MongoClientSettings.builder()
+                .applyToConnectionPoolSettings(builder ->
+                        builder.maxWaitTime(maxWaitTime, TimeUnit.MILLISECONDS)
+                        .maxSize(minConnectionsPerHost)
+                        .minSize(maxConnectionsPerHost)
+                        .maxConnectionIdleTime(0, TimeUnit.MILLISECONDS)
+                        .maxConnectionLifeTime(0, TimeUnit.MILLISECONDS))
+                .build();
     }
 
-    @Bean
-    public MappingMongoConverter mappingMongoConverter(MongoDbFactory mongoDbFactory,
-                                                       MongoMappingContext mongoMappingContext) {
-
-        DbRefResolver dbRefResolver = new DefaultDbRefResolver(mongoDbFactory);
-        MappingMongoConverter converter = new MappingMongoConverter(dbRefResolver, mongoMappingContext);
-        converter.setTypeMapper(new DefaultMongoTypeMapper(null));
-
-        return converter;
-    }
 }

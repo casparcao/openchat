@@ -1,36 +1,39 @@
 package top.mikecao.openchat.client.handler;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
+import top.mikecao.openchat.core.proto.Proto;
 
-import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class ClientHandler extends ChannelInboundHandlerAdapter {
+
+/**
+ * @author mike
+ */
+@Slf4j
+public class ClientHandler extends SimpleChannelInboundHandler<Proto.Message> {
+
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf m = (ByteBuf) msg; // (1)
-        try{
-            while(m.isReadable()){
-                System.out.print((char)m.readByte());
-                System.out.flush();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    public void channelRead0(ChannelHandlerContext ctx, Proto.Message msg) throws Exception {
+        log.info("ClientHandler.channelRead>>" + msg);
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        final ByteBuf buf = ctx.alloc().buffer();
-        byte[] headers = "EVENT:AUTH;UNAME:tom;PASSWD:jerry".getBytes();
-        byte[] body = "hello world".getBytes();
-        buf.writeInt(headers.length + body.length + 6);
-        buf.writeShort(headers.length);
-        buf.writeInt(body.length);
-        buf.writeBytes(headers);
-        buf.writeBytes(body);
-        ctx.writeAndFlush(buf);
+        Proto.LoginRequest loginRequest = Proto.LoginRequest.newBuilder()
+                .setAccount("a@b.com")
+                .setPasswd("88888888")
+                .build();
+        Proto.Message message = Proto.Message.newBuilder()
+                .setId(ThreadLocalRandom.current().nextInt(1000))
+                .setTs(System.currentTimeMillis())
+                .setType(Proto.MsgType.LOGIN)
+                .setLogin(loginRequest)
+                .build();
+        System.out.println(message);
+
+        ctx.writeAndFlush(message);
     }
 
     @Override

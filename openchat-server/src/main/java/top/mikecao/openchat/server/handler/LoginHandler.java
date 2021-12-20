@@ -1,55 +1,76 @@
 package top.mikecao.openchat.server.handler;
 
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.CharsetUtil;
+import io.netty.channel.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import top.mikecao.openchat.core.Event;
-import top.mikecao.openchat.core.HKEY;
-import top.mikecao.openchat.core.Headers;
-import top.mikecao.openchat.core.Message;
-import top.mikecao.openchat.server.entity.User;
-import top.mikecao.openchat.server.repository.UserRepository;
-
-import java.util.Optional;
+import reactor.core.publisher.Mono;
+import top.mikecao.openchat.core.MsgBuilder;
+import top.mikecao.openchat.core.proto.Proto;
+import top.mikecao.openchat.server.session.ChannelStore;
+import top.mikecao.openchat.server.session.TokenGranter;
+import top.mikecao.openchat.server.session.User;
+import top.mikecao.openchat.server.session.UserLoader;
 
 /**
  * @author mike
  */
 
+@Slf4j
 @Component
-public class LoginHandler extends SimpleChannelInboundHandler<Message> {
+@ChannelHandler.Sharable
+public class LoginHandler extends SimpleChannelInboundHandler<Proto.Message> {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserLoader userLoader;
+    @Autowired
+    private ChannelStore channelStore;
+    @Autowired
+    private TokenGranter tokenGranter;
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
-        Headers headers = msg.headers();
-        String event = headers.first(HKEY.EVENT, "");
+    public void channelRead0(ChannelHandlerContext ctx, Proto.Message msg) {
+        Proto.MsgType type = msg.getType();
         //不是登录事件，不做处理
-        if(!Event.AUTH.name().equals(event)){
+        if(!Proto.MsgType.LOGIN.equals(type)){
             ctx.fireChannelRead(msg);
             return;
         }
-        String username = headers.first(HKEY.UNAME, "");
-        String password = headers.first(HKEY.PASSWD, "");
-        boolean validate = validate(username, password);
-        if(!validate){
-            //todo ,返回数据格式化
-            ctx.writeAndFlush(Unpooled.copiedBuffer("用户名或密码错误", CharsetUtil.UTF_8));
-        }else{
-            ctx.writeAndFlush(Unpooled.copiedBuffer("登录成功", CharsetUtil.UTF_8));
-        }
+        Proto.LoginRequest lr = msg.getLogin();
+        String account = lr.getAccount();
+        String password = lr.getPasswd();
+
+        Mono<User> mono = userLoader.load(account);
+        //只有用户存在，并且密码校验通过才算登录成功
+
+        mono.filter(x -> validate(x, password))
+                .map(x -> {
+                    Proto.Message.Builder result = MsgBuilder.get(Proto.MsgType.LOGIN);
+                    //生成token，并返回客户端
+                    String token = tokenGranter.grant(x);
+                    result.setToken(token);
+                    Proto.Response response = Proto.Response.newBuilder()
+                            .setCode(200)
+                            .setMessage("登录成功")
+                            .build();
+                    Channel channel = ctx.channel();
+                    //保存channel，以备后续处理
+                    channelStore.store(x.getId(), channel);
+                    result.setResponse(response);
+                    return result.build();
+                })
+                .switchIfEmpty(Mono.just(
+                        MsgBuilder.get(Proto.MsgType.LOGIN)
+                                .setResponse(Proto.Response.newBuilder()
+                                        .setCode(400)
+                                        .setMessage("账号或者密码不正确")
+                                        .build())
+                                .build()))
+                .subscribe(ctx::writeAndFlush);
         //do not propagate
     }
 
-    private boolean validate(String username, String password) {
-        Optional<User> optional = userRepository.findByUsername(username);
-        return optional
-                .map(x->x.getPassword().equals(password))
-                .orElse(false);
+    private boolean validate(User user, String password) {
+        return user.getPassword().equals(password);
     }
 }

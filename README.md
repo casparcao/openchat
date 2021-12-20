@@ -8,3 +8,13 @@
 4. 面向开发者的聊天工具，代码的编写预览等功能，方便代码的分享，阅读
 5. 支持文本文字，文件，图片分享
 6. 基于SSL/TLS加密传输数据
+
+### 所用技术&中间件
+
+1. netty 4.1.x
+2. spring boot 2.3.x
+3. webflux
+4. redis
+5. rabbitmq 3.19.x
+6. redisson
+7. mongodb

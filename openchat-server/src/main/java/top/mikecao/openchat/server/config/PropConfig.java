@@ -8,6 +8,8 @@ import org.springframework.context.annotation.PropertySource;
  */
 
 @Configuration
-@PropertySource({"classpath:datasource.properties","classpath:keystore.properties"})
+@PropertySource({"classpath:datasource.properties",
+        "classpath:keystore.properties",
+        "classpath:rabbit.properties"})
 public class PropConfig {
 }

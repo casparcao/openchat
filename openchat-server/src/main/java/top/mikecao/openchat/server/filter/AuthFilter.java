@@ -1,14 +1,10 @@
 package top.mikecao.openchat.server.filter;
 
-import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.CharsetUtil;
 import org.springframework.stereotype.Component;
-import top.mikecao.openchat.core.Event;
-import top.mikecao.openchat.core.HKEY;
-import top.mikecao.openchat.core.Headers;
-import top.mikecao.openchat.core.Message;
+import top.mikecao.openchat.core.proto.Proto;
 
 /**
  * <p>
@@ -19,21 +15,25 @@ import top.mikecao.openchat.core.Message;
  * </p>
  * @author mike
  */
+@ChannelHandler.Sharable
 @Component
-public class AuthFilter extends SimpleChannelInboundHandler<Message> {
+public class AuthFilter extends SimpleChannelInboundHandler<Proto.Message> {
 
      @Override
-     protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
-          Headers headers = msg.headers();
-          String event = headers.first(HKEY.EVENT, "");
-          //不是登录事件，则需要判断是否登录，或者token是否有效
-          if(!Event.AUTH.name().equals(event)){
-               String token = headers.first(HKEY.TOKEN, "");
-               if(!validate(token)){
-                    ctx.writeAndFlush(Unpooled.copiedBuffer("未认证的消息", CharsetUtil.UTF_8));
-                    return;
-               }
+     protected void channelRead0(ChannelHandlerContext ctx, Proto.Message msg) throws Exception {
+          Proto.MsgType type = msg.getType();
+          if(Proto.MsgType.LOGIN.equals(type)){
+               Proto.LoginRequest lr = msg.getLogin();
+               System.out.println("Filter登录信息>>" + lr);
           }
+          //不是登录事件，则需要判断是否登录，或者token是否有效
+          //if(!Event.AUTH.name().equals(event)){
+          //     String token = headers.first(HKEY.TOKEN, "");
+          //     if(!validate(token)){
+          //          ctx.writeAndFlush(Unpooled.copiedBuffer("未认证的消息", CharsetUtil.UTF_8));
+          //          return;
+          //     }
+          //}
           ctx.fireChannelRead(msg);
      }
 
