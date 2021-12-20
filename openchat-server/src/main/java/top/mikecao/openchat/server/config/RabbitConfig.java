@@ -1,11 +1,8 @@
 package top.mikecao.openchat.server.config;
 
 import org.springframework.amqp.core.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
 
 /**
  * @author caohailong
@@ -14,28 +11,23 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class RabbitConfig {
 
+    public static final String EXCHANGE_NAME = "chat_topic_exchange";
+    public static final String ROUTING_KEY = "chat";
+    public static final String QUEUE_NAME = "chat_queue";
+
     @Bean
     public TopicExchange chatTopicExchange(){
-        return new TopicExchange("chat_topic_exchange", true, false);
+        return new TopicExchange(EXCHANGE_NAME, true, false);
     }
 
     @Bean
     public Queue chatQueue(){
-        return new Queue("chat_queue", true, false, false);
+        return new Queue(QUEUE_NAME, true, false, false);
     }
 
     @Bean
     public Binding bindingChatTopicExchangeAndQueue(){
-        return BindingBuilder.bind(chatQueue()).to(chatTopicExchange()).with("chat");
+        return BindingBuilder.bind(chatQueue()).to(chatTopicExchange()).with(ROUTING_KEY);
     }
 
-    @Autowired
-    private AmqpAdmin admin;
-    @PostConstruct
-    public void init(){
-        admin.declareExchange(chatTopicExchange());
-        admin.declareQueue(chatQueue());
-        admin.declareBinding(bindingChatTopicExchangeAndQueue());
-
-    }
 }
