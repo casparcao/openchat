@@ -18,7 +18,7 @@ public interface ChannelStore {
     /**
      * 查询指定用户id所建立的连接
      * @param uid uid
-     * @return channel
+     * @return null if channel not exits
      */
     Channel load(long uid);
 

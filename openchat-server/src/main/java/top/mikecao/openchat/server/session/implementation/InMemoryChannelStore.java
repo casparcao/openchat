@@ -8,6 +8,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import org.springframework.stereotype.Component;
 import top.mikecao.openchat.server.session.ChannelStore;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -30,7 +31,11 @@ public class InMemoryChannelStore implements ChannelStore {
 
     @Override
     public Channel load(long uid){
-        return CHANNELS.find(TOKEN_CHANNEL_ID_MAP.get(uid));
+        ChannelId cid = TOKEN_CHANNEL_ID_MAP.get(uid);
+        if (Objects.isNull(cid)) {
+            return null;
+        }
+        return CHANNELS.find(cid);
     }
 
     @Override

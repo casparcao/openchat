@@ -44,7 +44,7 @@ public class P2pChatHandler extends SimpleChannelInboundHandler<Proto.Message> {
         Chat chat = new Chat()
                 .setId(id)
                 .setMessage(pc.getMessage())
-                .setBroadcast(false)
+                .setBroadcast(pc.getBroadcast())
                 .setType(pc.getType())
                 .setFrom(pc.getFrom())
                 .setTo(pc.getTo())

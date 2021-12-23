@@ -31,7 +31,7 @@ enum MsgType {
 message Chat {
     uint64 from = 1;
     uint64 to = 2; //接收方id(用户，群组）
-    uint64 at = 3; //@对方id
+    bool broadcast = 3; //是否是群组消息
     ChatType type = 4;
     string message = 5;
 }
