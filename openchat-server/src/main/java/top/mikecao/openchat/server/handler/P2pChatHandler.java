@@ -44,16 +44,16 @@ public class P2pChatHandler extends SimpleChannelInboundHandler<Proto.Message> {
         Chat chat = new Chat()
                 .setId(id)
                 .setMessage(pc.getMessage())
-                .setBroadcast(pc.getBroadcast())
                 .setType(pc.getType())
                 .setFrom(pc.getFrom())
+                .setBroadcast(false)
                 .setTo(pc.getTo())
                 .setTs(new Date());
         // 1. 将消息保存到消息库
         simpleChatRepository.save(chat)
                 .subscribe();
         // 2. 将消息投递到消息队列
-        producer.produce(id + "", pc);
+        producer.produce(id + "", chat);
         // 如果对方在线，消息队列中的消息被消费时，直接投递给对方
         // 否则，消息队列消息不做处理直接抛弃，等对方上线时，重新从库中拉去未读的消息
         //ctx.writeAndFlush();

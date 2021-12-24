@@ -6,10 +6,12 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.server.config.RabbitConfig;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author caohailong

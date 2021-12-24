@@ -28,21 +28,20 @@ import java.security.cert.X509Certificate;
 /**
  * @author mike
  */
-public class OpenChatClient extends Application {
+public class OpenChatClient {
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Group parent = new Group();
-        Paint paint = Color.BLACK;
-        Scene scene = new Scene(parent, 300, 300, paint);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("asdfasf");
-        primaryStage.show();
-    }
+    //@Override
+    //public void start(Stage primaryStage) throws Exception {
+    //    Group parent = new Group();
+    //    Paint paint = Color.BLACK;
+    //    Scene scene = new Scene(parent, 300, 300, paint);
+    //    primaryStage.setScene(scene);
+    //    primaryStage.setTitle("asdfasf");
+    //    primaryStage.show();
+    //}
 
     public static void main(String[] args) throws InterruptedException, KeyStoreException,
             UnrecoverableEntryException, NoSuchAlgorithmException, IOException, CertificateException {
-        launch(args);
         KeyCertStore store = new KeyCertStore("top.mikecao.openchat.pc.keystore","top.mikecao.openchat.pc");
         PrivateKey pk = store.key("top.mikecao.openchat.pc","top.mikecao.openchat.pc");
         X509Certificate x509Certificate = store.certificate("top.mikecao.openchat.pc");
