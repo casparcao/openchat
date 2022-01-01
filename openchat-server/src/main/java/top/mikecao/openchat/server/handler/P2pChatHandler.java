@@ -60,9 +60,4 @@ public class P2pChatHandler extends SimpleChannelInboundHandler<Proto.Message> {
         //do not propagate
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        log.error("点对点消息处理异常>>", cause);
-        ctx.flush();
-    }
 }

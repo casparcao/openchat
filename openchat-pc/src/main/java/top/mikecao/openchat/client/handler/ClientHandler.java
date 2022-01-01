@@ -67,9 +67,4 @@ public class ClientHandler extends SimpleChannelInboundHandler<Proto.Message> {
         });
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        System.out.println(cause);
-        super.exceptionCaught(ctx, cause);
-    }
 }

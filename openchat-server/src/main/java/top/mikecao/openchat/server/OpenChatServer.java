@@ -38,6 +38,7 @@ public class OpenChatServer {
     private final EventExecutorGroup loginExecutorGroup = new DefaultEventExecutorGroup(16);
     private final EventExecutorGroup p2pChatExecutorGroup = new DefaultEventExecutorGroup(16);
     private final EventExecutorGroup p2gChatExecutorGroup = new DefaultEventExecutorGroup(16);
+    private final EventExecutorGroup unreadMsgFetchExecutorGroup = new DefaultEventExecutorGroup(16);
 
     @PostConstruct
     public void start() throws CertificateException,
@@ -69,6 +70,12 @@ public class OpenChatServer {
     @Autowired
     @Qualifier("p2gChatHandler")
     private ChannelInboundHandler p2gChatHandler;
+    @Autowired
+    @Qualifier("unreadMsgFetchHandler")
+    private ChannelInboundHandler unreadMsgFetchHandler;
+    @Autowired
+    @Qualifier("exceptionHandler")
+    private ChannelDuplexHandler exceptionHandler;
 
     private ChannelInitializer<Channel> channelInitializer(SslContext sslCtx) {
         return new ChannelInitializer<Channel>() {
@@ -81,9 +88,11 @@ public class OpenChatServer {
                         .addLast("FrameEncoder", new ProtobufVarint32LengthFieldPrepender())
                         .addLast("ProtobufEncoder", new ProtobufEncoder())
                         .addLast("AuthFilter", authFilter)
+                        .addLast(unreadMsgFetchExecutorGroup, "unreadMsgFetchHandler", unreadMsgFetchHandler)
                         .addLast(loginExecutorGroup, "LoginHandler", loginHandler)
                         .addLast(p2pChatExecutorGroup, "p2pChatHandler", p2pChatHandler)
-                        .addLast(p2gChatExecutorGroup, "p2gChatHandler", p2gChatHandler);
+                        .addLast(p2gChatExecutorGroup, "p2gChatHandler", p2gChatHandler)
+                        .addLast("exceptionHandler", exceptionHandler);
             }
         };
     }

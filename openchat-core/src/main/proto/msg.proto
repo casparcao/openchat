@@ -13,19 +13,19 @@ message Message{
     string token = 4;  //请求的令牌
     oneof content {
         LoginRequest login = 5;
-        string json = 6;
-        Response response = 7;
         Chat chat = 8;
+        Error error = 9;
+        None none = 10;
     } //消息内容
 }
 
 enum MsgType {
     LOGIN = 0; //登录
-    LOGOUT = 1; //登出
-    P2P = 2; //单聊
-    P2G = 3; //群聊
-    BROADCAST = 4; //广播
-    JSON = 5; //json格式的可拓展内容，具体数据格式由业务绝对
+    P2P = 1; //单聊
+    P2G = 2; //群聊
+    READ = 3; //接收到并阅读了消息
+    FETCH = 4; //拉取未读的消息
+    ERR = 5; //异常消息
 }
 
 message Chat {
@@ -46,6 +46,14 @@ enum ChatType {
     CODE = 3;
     /** 富文本 */
     RTF = 4;
+}
+
+//不需要内容的消息
+message None {}
+
+message Error {
+    int32 code = 1;
+    string message = 2;
 }
 
 message LoginRequest {
