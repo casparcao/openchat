@@ -50,7 +50,7 @@ message Pull {
         // true = 拉取指定聊天室中未读取的所有消息
       bool full = 1;
       // 指定拉取的聊天室id
-      repeated uint64 rids = 2;
+      uint64 room = 2;
     }
     message Response {
         repeated Room rooms = 1;
