@@ -11,12 +11,12 @@ public interface TokenGranter {
      * @param auth 认证信息
      * @return token
      */
-    String grant(User auth);
+    String grant(Auth auth);
 
     /**
      * 根据token信息，解析为对应的认证对象
      * @param token token
      * @return auth
      */
-    User resolve(String token);
+    Auth resolve(String token);
 }

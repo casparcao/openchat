@@ -7,6 +7,7 @@ import io.netty.channel.ChannelPromise;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.mikecao.openchat.core.MsgBuilder;
+import top.mikecao.openchat.core.exception.AppAuthException;
 import top.mikecao.openchat.core.exception.AppClientException;
 import top.mikecao.openchat.core.proto.Proto;
 
@@ -33,10 +34,14 @@ public class ExceptionHandler extends ChannelDuplexHandler {
             AppClientException e = (AppClientException) cause;
             builder.setCode(e.code())
                     .setMessage(e.getMessage());
-        } else {
+        } else if (cause instanceof AppAuthException){
+            log.warn("认证异常>>", cause);
+            builder.setCode(401)
+                    .setMessage("身份认证失败");
+        }else {
             log.error("服务端数据异常>>", cause);
-            builder.setCode(-1)
-                    .setMessage(cause.getMessage());
+            builder.setCode(500)
+                    .setMessage("系统内部异常");
         }
         Proto.Message msg = MsgBuilder.get(Proto.MsgType.ERR)
                 .setError(builder.build())

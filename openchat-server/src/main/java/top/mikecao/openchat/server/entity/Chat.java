@@ -24,16 +24,12 @@ public class Chat {
      * 消息发送人
      */
     @Indexed
-    private long from;
+    private long speaker;
     /**
-     * 用户id, 群组id
+     * 聊天室ID
      */
     @Indexed
-    private long to;
-    /**
-     * 是否是群组消息
-     */
-    private boolean broadcast;
+    private long room;
     private Proto.ChatType type;
     private String message;
     private Date ts;

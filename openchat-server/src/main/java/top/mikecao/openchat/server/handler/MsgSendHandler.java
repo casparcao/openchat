@@ -22,7 +22,7 @@ import java.util.Date;
 @Slf4j
 @Component
 @ChannelHandler.Sharable
-public class P2pChatHandler extends SimpleChannelInboundHandler<Proto.Message> {
+public class MsgSendHandler extends SimpleChannelInboundHandler<Proto.Message> {
 
     @Autowired
     private SimpleChatRepository simpleChatRepository;

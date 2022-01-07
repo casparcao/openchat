@@ -24,19 +24,18 @@ public class User {
     private String username;
     private String password;
 
-    private Set<Friend> friends;
-    private Set<Group> groups;
+    private Set<Room> rooms;
 
     @Data
     @Accessors(chain = true)
-    public static class Group {
-        private long gid;
-        private long offset;
-    }
-    @Data
-    @Accessors(chain = true)
-    public static class Friend {
-        private long fid;
+    public static class Room {
+        /**
+         * 聊天室id
+         */
+        private long id;
+        /**
+         * 用户在该聊天室的最大已读消息id，每次用户进入该聊天室阅读消息后更新
+         */
         private long offset;
     }
 }
