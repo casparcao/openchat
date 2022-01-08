@@ -46,22 +46,20 @@ public class LoginHandler extends SimpleChannelInboundHandler<Proto.Message> {
                     //生成token，并返回客户端
                     String token = tokenGranter.grant(new Auth().setId(x.getId()).setAccount(x.getAccount()));
                     result.setToken(token);
-                    Proto.Login.Response response = Proto.Response.newBuilder()
-                            .setCode(200)
-                            .setMessage("登录成功")
+                    Proto.Login.Response response = Proto.Login.Response.newBuilder()
+                            .setMsg("登录成功")
                             .build();
                     Channel channel = ctx.channel();
                     //保存channel，以备后续处理
                     channelStore.store(x.getId(), channel);
-                    result.setResponse(response);
+                    result.setLogin(Proto.Login.newBuilder().setResponse(response).build());
                     return result.build();
                 })
                 .switchIfEmpty(Mono.just(
                         MsgBuilder.get(Proto.MsgType.LOGIN)
-                                .setResponse(Proto.Response.newBuilder()
-                                        .setCode(400)
-                                        .setMessage("账号或者密码不正确")
-                                        .build())
+                                .setLogin(Proto.Login.newBuilder().setResponse(Proto.Login.Response.newBuilder()
+                                        .setMsg("账号或者密码不正确")
+                                        .build()).build())
                                 .build()))
                 .subscribe(ctx::writeAndFlush);
         //do not propagate

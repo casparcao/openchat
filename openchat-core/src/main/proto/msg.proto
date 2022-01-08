@@ -18,6 +18,7 @@ message Message{
         None none = 8;
         Pull pull = 9;
         Push push = 10;
+        Ack ack = 11;
     } //消息内容
 }
 
@@ -28,6 +29,11 @@ enum MsgType {
     ACK = 3; //接收到并阅读了消息
     PULL = 4; //拉取未读的消息
     ERR = 5; //异常消息
+}
+
+message Ack {
+    uint64 room = 1;
+    uint64 offset = 2;
 }
 
 message Chat {
@@ -89,5 +95,9 @@ message Login {
         string account = 1;
         string passwd = 2;
     }
+    message Response {
+        string msg = 1;
+    }
     Request request = 1;
+    Response response = 2;
 }

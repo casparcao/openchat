@@ -41,11 +41,11 @@ public class ChatConsumer {
         simpleRoomRepository.findById(chat.getRoom())
                 .subscribe(group -> {
                     Set<Long> users = group.getUsers();
-                    users.forEach(user -> push(user, chat));
+                    users.forEach(user -> push0(user, chat));
                 });
     }
 
-    private void push(long uid, Chat chat){
+    private void push0(long uid, Chat chat){
         Channel channel = channelStore.load(uid);
         if (Objects.nonNull(channel) && channel.isActive()) {
             channel.writeAndFlush(wrap(chat));
