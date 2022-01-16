@@ -1,15 +1,12 @@
-package top.mikecao.openchat.server.session.impl;
+package top.mikecao.openchat.core.auth.granters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import top.mikecao.openchat.core.exception.AppAuthException;
 import top.mikecao.openchat.core.exception.AppServerException;
-import top.mikecao.openchat.server.session.Auth;
-import top.mikecao.openchat.server.session.TokenGranter;
+import top.mikecao.openchat.core.auth.Account;
+import top.mikecao.openchat.core.auth.TokenGranter;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -26,32 +23,33 @@ import java.util.Base64;
  */
 
 @Slf4j
-@Component
 public class DefaultTokenGranter implements TokenGranter {
 
-    @Value("${token.secret:$IbHJ$^ZpBNsSUWd*K}")
-    private String secret;
-    @Autowired
-    private ObjectMapper mapper;
+    private static final String SECRET = "$IbHJ$^ZpBNsSUWd*K";
+    private final ObjectMapper mapper;
     private final Base64.Encoder encoder = Base64.getMimeEncoder();
     private final Base64.Decoder decoder = Base64.getMimeDecoder();
 
+    public DefaultTokenGranter(ObjectMapper objectMapper){
+        this.mapper = objectMapper;
+    }
+
     @Override
-    public String grant(Auth auth) {
+    public String grant(Account account) {
         String content;
         try {
-            content = mapper.writeValueAsString(auth);
+            content = mapper.writeValueAsString(account);
         }catch (JsonProcessingException e){
             log.error("颁发Token异常>>", e);
             throw new AppServerException("办法Token异常", e);
         }
         String prefix = encoder.encodeToString(content.getBytes(StandardCharsets.UTF_8));
-        String suffix = encoder.encodeToString(md5(content + secret));
+        String suffix = encoder.encodeToString(md5(content + SECRET));
         return prefix + "." + suffix;
     }
 
     @Override
-    public Auth resolve(String token) {
+    public Account resolve(String token) {
         int size = 2;
         String[] parts = token.split("\\.");
         if(parts.length != size){
@@ -60,12 +58,12 @@ public class DefaultTokenGranter implements TokenGranter {
         String prefix = parts[0];
         String content = new String(decoder.decode(prefix.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
         String suffix = parts[1];
-        String calcSign = encoder.encodeToString(md5(content + secret));
+        String calcSign = encoder.encodeToString(md5(content + SECRET));
         if(!calcSign.equalsIgnoreCase(suffix)){
             throw new AppAuthException("Token签名错误");
         }
         try {
-            return mapper.readValue(content, Auth.class);
+            return mapper.readValue(content, Account.class);
         } catch (JsonProcessingException e) {
             log.error("Token解析异常", e);
             throw new AppServerException("Token解析异常", e);

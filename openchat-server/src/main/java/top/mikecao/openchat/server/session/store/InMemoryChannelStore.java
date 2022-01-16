@@ -1,4 +1,4 @@
-package top.mikecao.openchat.server.session.impl;
+package top.mikecao.openchat.server.session.store;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;

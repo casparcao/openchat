@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: openchat-web
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework: INFO
+  file:
+    name: /var/log/openchat/web.log
+    max-size: 50MB

@@ -7,8 +7,8 @@ import io.netty.util.AttributeKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.mikecao.openchat.core.proto.Proto;
-import top.mikecao.openchat.server.session.Auth;
-import top.mikecao.openchat.server.session.TokenGranter;
+import top.mikecao.openchat.core.auth.Account;
+import top.mikecao.openchat.core.auth.TokenGranter;
 
 /**
  * <p>
@@ -39,8 +39,8 @@ public class AuthFilter extends SimpleChannelInboundHandler<Proto.Message> {
           }
           //不是登录事件，则需要判断是否登录，或者token是否有效
           String token = msg.getToken();
-          Auth auth = granter.resolve(token);
-          ctx.channel().attr(AttributeKey.valueOf(AUTH_ATTR_NAME)).set(auth);
+          Account account = granter.resolve(token);
+          ctx.channel().attr(AttributeKey.valueOf(AUTH_ATTR_NAME)).set(account);
           ctx.fireChannelRead(msg);
      }
 

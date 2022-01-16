@@ -12,7 +12,7 @@ import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.server.entity.User;
 import top.mikecao.openchat.server.repository.SimpleUserRepository;
 import top.mikecao.openchat.server.service.MaxRoomChatIdService;
-import top.mikecao.openchat.server.session.Auth;
+import top.mikecao.openchat.core.auth.Account;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,10 +44,10 @@ public class MsgFetchHandler extends SimpleChannelInboundHandler<Proto.Message> 
             ctx.fireChannelRead(msg);
             return;
         }
-        Auth auth = (Auth) ctx.channel()
+        Account account = (Account) ctx.channel()
                 .attr(AttributeKey.valueOf(AUTH_ATTR_NAME))
                 .get();
-        long uid = auth.getId();
+        long uid = account.getId();
         simpleUserRepository.findById(uid)
                 .subscribe(x -> fetch(x, ctx));
     }

@@ -1,4 +1,4 @@
-package top.mikecao.openchat.server.session;
+package top.mikecao.openchat.core.auth;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -10,7 +10,8 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class Auth {
+public class Account {
     private long id;
-    private String account;
+    /** 邮箱或者唯一账号 */
+    private String username;
 }

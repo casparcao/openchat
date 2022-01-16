@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import top.mikecao.openchat.core.MsgBuilder;
+import top.mikecao.openchat.core.auth.Account;
+import top.mikecao.openchat.core.auth.TokenGranter;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.server.session.*;
 
@@ -44,7 +46,7 @@ public class LoginHandler extends SimpleChannelInboundHandler<Proto.Message> {
                 .map(x -> {
                     Proto.Message.Builder result = MsgBuilder.get(Proto.MsgType.LOGIN);
                     //生成token，并返回客户端
-                    String token = tokenGranter.grant(new Auth().setId(x.getId()).setAccount(x.getAccount()));
+                    String token = tokenGranter.grant(new Account().setId(x.getId()).setUsername(x.getAccount()));
                     result.setToken(token);
                     Proto.Login.Response response = Proto.Login.Response.newBuilder()
                             .setMsg("登录成功")

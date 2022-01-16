@@ -14,7 +14,7 @@ import top.mikecao.openchat.server.entity.Chat;
 import top.mikecao.openchat.server.entity.User;
 import top.mikecao.openchat.server.repository.SimpleChatRepository;
 import top.mikecao.openchat.server.repository.SimpleUserRepository;
-import top.mikecao.openchat.server.session.Auth;
+import top.mikecao.openchat.core.auth.Account;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,14 +46,14 @@ public class MsgPullHandler extends SimpleChannelInboundHandler<Proto.Message> {
             ctx.fireChannelRead(msg);
             return;
         }
-        Auth auth = (Auth) ctx.channel()
+        Account account = (Account) ctx.channel()
                 .attr(AttributeKey.valueOf(AUTH_ATTR_NAME))
                 .get();
         Proto.Pull.Request request = msg.getPull().getRequest();
         //待拉取消息的聊天室id列表
         //出于性能考虑，每次只拉取一个聊天室的消息
         Long rid = request.getRoom();
-        long uid = auth.getId();
+        long uid = account.getId();
         simpleUserRepository.findById(uid)
                 .subscribe(x -> pull(x, rid, ctx));
     }

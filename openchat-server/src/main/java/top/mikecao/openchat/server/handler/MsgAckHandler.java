@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.server.repository.MgmtUserRepository;
-import top.mikecao.openchat.server.session.Auth;
+import top.mikecao.openchat.core.auth.Account;
 
 import static top.mikecao.openchat.server.filter.AuthFilter.AUTH_ATTR_NAME;
 
@@ -35,10 +35,10 @@ public class MsgAckHandler extends SimpleChannelInboundHandler<Proto.Message> {
             ctx.fireChannelRead(msg);
             return;
         }
-        Auth auth = (Auth) ctx.channel()
+        Account account = (Account) ctx.channel()
                 .attr(AttributeKey.valueOf(AUTH_ATTR_NAME))
                 .get();
-        long uid = auth.getId();
+        long uid = account.getId();
         //确认消息，每次更新用户已读消息的最大id，offset
         Proto.Ack ack = msg.getAck();
 

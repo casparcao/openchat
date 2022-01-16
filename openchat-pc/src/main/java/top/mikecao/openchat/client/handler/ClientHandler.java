@@ -33,15 +33,15 @@ public class ClientHandler extends SimpleChannelInboundHandler<Proto.Message> {
             String[] lines = line.split(";");
             String account = lines[0];
             String passwd = lines[1];
-            Proto.LoginRequest loginRequest = Proto.LoginRequest.newBuilder()
-                    .setAccount(account)
-                    .setPasswd(passwd)
-                    .build();
+            //Proto.LoginRequest loginRequest = Proto.LoginRequest.newBuilder()
+            //        .setAccount(account)
+            //        .setPasswd(passwd)
+            //        .build();
             Proto.Message message = Proto.Message.newBuilder()
                     .setId(ThreadLocalRandom.current().nextInt(1000))
                     .setTs(System.currentTimeMillis())
                     .setType(Proto.MsgType.LOGIN)
-                    .setLogin(loginRequest)
+                    //.setLogin(loginRequest)
                     .build();
             ctx.writeAndFlush(message);
 
@@ -52,15 +52,15 @@ public class ClientHandler extends SimpleChannelInboundHandler<Proto.Message> {
             long t0 = Long.parseLong(lines[1]);
             String content = lines[2];
             Proto.Chat chatRequest = Proto.Chat.newBuilder()
-                    .setFrom(from)
-                    .setTo(t0)
+                    //.setFrom(from)
+                    //.setTo(t0)
                     .setMessage(content)
                     .setType(Proto.ChatType.TEXT)
                     .build();
             message = Proto.Message.newBuilder()
                     .setId(ThreadLocalRandom.current().nextInt(1000))
                     .setTs(System.currentTimeMillis())
-                    .setType(Proto.MsgType.P2P)
+                    .setType(Proto.MsgType.SEND)
                     .setChat(chatRequest)
                     .build();
             ctx.writeAndFlush(message);
