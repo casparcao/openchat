@@ -3,6 +3,7 @@ package top.mikecao.openchat.client.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -42,9 +43,13 @@ public class LoginController implements Initializable {
         Result<Auth> result = Client.request("http://localhost:8080/login", login, new TypeReference<>() {});
         if(result.success()){
             Storage.store("E:/temp/.auth.json", result.getData());
-            application.displayChat();
+            application.main(result.getData());
         }else{
-            System.out.println(result);
+            //提示密码错误
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.titleProperty().set("提示");
+            alert.contentTextProperty().set("账号或密码错误");
+            alert.showAndWait();
         }
     }
 

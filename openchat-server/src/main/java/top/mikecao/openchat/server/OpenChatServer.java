@@ -13,11 +13,13 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.core.ssl.KeyCertStore;
+import top.mikecao.openchat.server.filter.AuthFilter;
+import top.mikecao.openchat.server.filter.ExceptionHandler;
+import top.mikecao.openchat.server.handler.*;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -37,7 +39,6 @@ public class OpenChatServer {
     private final EventLoopGroup work = new NioEventLoopGroup();
     private final EventExecutorGroup loginExecutorGroup = new DefaultEventExecutorGroup(16);
     private final EventExecutorGroup p2pChatExecutorGroup = new DefaultEventExecutorGroup(16);
-    private final EventExecutorGroup p2gChatExecutorGroup = new DefaultEventExecutorGroup(16);
     private final EventExecutorGroup unreadMsgFetchExecutorGroup = new DefaultEventExecutorGroup(16);
 
     @PostConstruct
@@ -59,23 +60,19 @@ public class OpenChatServer {
     }
 
     @Autowired
-    @Qualifier("authFilter")
-    private ChannelInboundHandler authFilter;
+    private AuthFilter authFilter;
     @Autowired
-    @Qualifier("loginHandler")
-    private ChannelInboundHandler loginHandler;
+    private LoginHandler loginHandler;
     @Autowired
-    @Qualifier("p2pChatHandler")
-    private ChannelInboundHandler p2pChatHandler;
+    private MsgSendHandler msgSendHandler;
     @Autowired
-    @Qualifier("p2gChatHandler")
-    private ChannelInboundHandler p2gChatHandler;
+    private MsgAckHandler msgAckHandler;
     @Autowired
-    @Qualifier("unreadMsgFetchHandler")
-    private ChannelInboundHandler unreadMsgFetchHandler;
+    private ExceptionHandler exceptionHandler;
     @Autowired
-    @Qualifier("exceptionHandler")
-    private ChannelDuplexHandler exceptionHandler;
+    private MsgPullHandler msgPullHandler;
+    @Autowired
+    private MsgFetchHandler msgFetchHandler;
 
     private ChannelInitializer<Channel> channelInitializer(SslContext sslCtx) {
         return new ChannelInitializer<Channel>() {
@@ -88,10 +85,11 @@ public class OpenChatServer {
                         .addLast("FrameEncoder", new ProtobufVarint32LengthFieldPrepender())
                         .addLast("ProtobufEncoder", new ProtobufEncoder())
                         .addLast("AuthFilter", authFilter)
-                        .addLast(unreadMsgFetchExecutorGroup, "unreadMsgFetchHandler", unreadMsgFetchHandler)
+                        .addLast(unreadMsgFetchExecutorGroup, "unreadMsgFetchHandler", msgAckHandler)
                         .addLast(loginExecutorGroup, "LoginHandler", loginHandler)
-                        .addLast(p2pChatExecutorGroup, "p2pChatHandler", p2pChatHandler)
-                        .addLast(p2gChatExecutorGroup, "p2gChatHandler", p2gChatHandler)
+                        .addLast(p2pChatExecutorGroup, "p2pChatHandler", msgSendHandler)
+                        .addLast(msgPullHandler)
+                        .addLast(msgFetchHandler)
                         .addLast("exceptionHandler", exceptionHandler);
             }
         };

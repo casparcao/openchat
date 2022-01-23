@@ -8,16 +8,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
+import top.mikecao.openchat.client.connection.Connector;
 import top.mikecao.openchat.client.controller.ChatController;
 import top.mikecao.openchat.client.controller.LoginController;
 import top.mikecao.openchat.core.file.Storage;
 import top.mikecao.openchat.core.auth.Auth;
 import top.mikecao.openchat.core.exception.AppServerException;
-import top.mikecao.openchat.core.registry.Server;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,11 +27,12 @@ import java.util.Objects;
 public class MainApplication extends javafx.application.Application {
 
     private Stage stage;
+    private Connector connector;
     private static final double MINIMUM_WINDOW_WIDTH = 400.0;
     private static final double MINIMUM_WINDOW_HEIGHT = 250.0;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         this.stage = stage;
         stage.setTitle("openchat");
         stage.setResizable(false);
@@ -46,21 +46,21 @@ public class MainApplication extends javafx.application.Application {
         Auth auth = Storage.load("E:/temp/.auth.json", Auth.class);
         if(Objects.isNull(auth)){
             //无本地token，跳到登录页进行初次登录
-            displayLogin();
+            login();
         }else{
             //存在，尝试连接服务器，连接成功直接跳转主页面
-            String token = auth.getToken();
-            List<Server> servers = auth.getServers();
-            //Connector.connect(server, callbak);
+            main(auth);
         }
         stage.show();
     }
 
-    public void displayLogin(){
+    public void login(){
         LoginController login = (LoginController) paint("/fxml/login.fxml", 450, 325);
         login.application(this);
     }
-    public void displayChat(){
+    public void main(Auth auth){
+        this.connector = new Connector();
+        connector.connect(auth.getToken(), auth.getServers());
         ChatController chat = (ChatController) paint("/fxml/chat.fxml", 800, 600);
         chat.application(this);
     }
