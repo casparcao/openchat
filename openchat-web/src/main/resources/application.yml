@@ -10,6 +10,7 @@ logging:
     root: INFO
     org:
       springframework: INFO
+    org.springframework.data.mongodb: DEBUG
   file:
     name: /var/log/openchat/web.log
     max-size: 50MB

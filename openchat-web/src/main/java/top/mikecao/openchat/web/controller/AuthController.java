@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import top.mikecao.openchat.core.Result;
+import top.mikecao.openchat.core.serialize.Result;
 import top.mikecao.openchat.web.command.LoginCommand;
 import top.mikecao.openchat.web.service.AuthService;
-import top.mikecao.openchat.web.vo.Auth;
+import top.mikecao.openchat.core.auth.Auth;
 
 /**
  * @author caohailong

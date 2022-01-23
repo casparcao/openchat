@@ -1,4 +1,4 @@
-package top.mikecao.openchat.toolset.lang;
+package top.mikecao.openchat.core.common;
 
 import java.util.Objects;
 

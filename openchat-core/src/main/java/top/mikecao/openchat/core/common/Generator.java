@@ -1,4 +1,4 @@
-package top.mikecao.openchat.toolset.common;
+package top.mikecao.openchat.core.common;
 
 /**
  * 生成器接口，实现类可按需生成某类型的值

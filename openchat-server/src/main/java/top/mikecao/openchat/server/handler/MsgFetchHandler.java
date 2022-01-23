@@ -7,7 +7,7 @@ import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import top.mikecao.openchat.core.MsgBuilder;
+import top.mikecao.openchat.core.serialize.MsgBuilder;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.server.entity.User;
 import top.mikecao.openchat.server.repository.SimpleUserRepository;

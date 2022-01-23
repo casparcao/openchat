@@ -12,7 +12,7 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import top.mikecao.openchat.client.handler.ClientHandler;
 import top.mikecao.openchat.core.proto.Proto;
-import top.mikecao.openchat.toolset.ssl.KeyCertStore;
+import top.mikecao.openchat.core.ssl.KeyCertStore;
 
 import java.io.IOException;
 import java.security.*;
@@ -23,16 +23,6 @@ import java.security.cert.X509Certificate;
  * @author mike
  */
 public class OpenChatClient {
-
-    //@Override
-    //public void start(Stage primaryStage) throws Exception {
-    //    Group parent = new Group();
-    //    Paint paint = Color.BLACK;
-    //    Scene scene = new Scene(parent, 300, 300, paint);
-    //    primaryStage.setScene(scene);
-    //    primaryStage.setTitle("asdfasf");
-    //    primaryStage.show();
-    //}
 
     public static void main(String[] args) throws InterruptedException, KeyStoreException,
             UnrecoverableEntryException, NoSuchAlgorithmException, IOException, CertificateException {

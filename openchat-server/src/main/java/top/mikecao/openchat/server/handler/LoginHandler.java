@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import top.mikecao.openchat.core.MsgBuilder;
+import top.mikecao.openchat.core.serialize.MsgBuilder;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.TokenGranter;
 import top.mikecao.openchat.core.proto.Proto;

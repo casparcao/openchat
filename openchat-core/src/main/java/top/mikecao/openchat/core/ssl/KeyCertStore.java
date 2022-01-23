@@ -1,4 +1,4 @@
-package top.mikecao.openchat.toolset.ssl;
+package top.mikecao.openchat.core.ssl;
 
 import java.io.IOException;
 import java.io.InputStream;

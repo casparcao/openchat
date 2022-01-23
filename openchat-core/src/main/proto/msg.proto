@@ -12,13 +12,12 @@ message Message{
     MsgType type = 3;  //消息类型
     string token = 4;  //请求的令牌
     oneof content {
-        Login login = 5;
-        Chat chat = 6;
-        Error error = 7;
-        None none = 8;
-        Pull pull = 9;
-        Push push = 10;
-        Ack ack = 11;
+        Chat chat = 5;
+        Error error = 6;
+        None none = 7;
+        Pull pull = 8;
+        Push push = 9;
+        Ack ack = 10;
     } //消息内容
 }
 
@@ -88,16 +87,4 @@ message None {}
 message Error {
     int32 code = 1;
     string message = 2;
-}
-
-message Login {
-    message Request {
-        string account = 1;
-        string passwd = 2;
-    }
-    message Response {
-        string msg = 1;
-    }
-    Request request = 1;
-    Response response = 2;
 }

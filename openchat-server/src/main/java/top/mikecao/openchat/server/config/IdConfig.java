@@ -6,8 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import top.mikecao.openchat.toolset.common.Generator;
-import top.mikecao.openchat.toolset.common.generators.SnowFlake;
+import top.mikecao.openchat.core.common.Generator;
+import top.mikecao.openchat.core.common.generators.SnowFlake;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

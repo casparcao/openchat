@@ -1,4 +1,4 @@
-package top.mikecao.openchat.core;
+package top.mikecao.openchat.core.serialize;
 
 import top.mikecao.openchat.core.proto.Proto;
 

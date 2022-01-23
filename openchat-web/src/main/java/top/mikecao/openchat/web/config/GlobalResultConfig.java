@@ -12,7 +12,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import top.mikecao.openchat.core.Result;
+import top.mikecao.openchat.core.serialize.Result;
 import top.mikecao.openchat.core.exception.AppClientException;
 import top.mikecao.openchat.core.exception.AppServerException;
 

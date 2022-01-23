@@ -6,7 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import top.mikecao.openchat.core.MsgBuilder;
+import top.mikecao.openchat.core.serialize.MsgBuilder;
 import top.mikecao.openchat.core.exception.AppAuthException;
 import top.mikecao.openchat.core.exception.AppClientException;
 import top.mikecao.openchat.core.proto.Proto;

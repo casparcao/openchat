@@ -41,11 +41,6 @@
         </dependency>
         <dependency>
             <groupId>top.mikecao</groupId>
-            <artifactId>openchat-toolset</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>top.mikecao</groupId>
             <artifactId>openchat-core</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import top.mikecao.openchat.core.proto.Proto;
-import top.mikecao.openchat.toolset.ssl.KeyCertStore;
+import top.mikecao.openchat.core.ssl.KeyCertStore;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

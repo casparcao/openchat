@@ -11,7 +11,7 @@ import top.mikecao.openchat.server.entity.Chat;
 import top.mikecao.openchat.server.producer.MsgProducer;
 import top.mikecao.openchat.server.repository.SimpleChatRepository;
 import top.mikecao.openchat.server.service.MaxRoomChatIdService;
-import top.mikecao.openchat.toolset.common.Generator;
+import top.mikecao.openchat.core.common.Generator;
 
 import java.util.Date;
 

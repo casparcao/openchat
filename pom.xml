@@ -18,7 +18,6 @@
 
     <modules>
         <module>openchat-server</module>
-        <module>openchat-toolset</module>
         <module>openchat-pc</module>
         <module>openchat-core</module>
         <module>openchat-web</module>

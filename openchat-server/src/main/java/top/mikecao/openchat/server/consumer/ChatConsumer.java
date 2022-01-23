@@ -6,7 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import top.mikecao.openchat.core.MsgBuilder;
+import top.mikecao.openchat.core.serialize.MsgBuilder;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.server.config.RabbitConfig;
 import top.mikecao.openchat.server.entity.Chat;

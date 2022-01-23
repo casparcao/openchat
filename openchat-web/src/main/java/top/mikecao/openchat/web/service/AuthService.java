@@ -3,14 +3,14 @@ package top.mikecao.openchat.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import top.mikecao.openchat.core.Result;
+import top.mikecao.openchat.core.serialize.Result;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.TokenGranter;
 import top.mikecao.openchat.core.registry.Registry;
 import top.mikecao.openchat.web.command.LoginCommand;
 import top.mikecao.openchat.web.entity.User;
 import top.mikecao.openchat.web.repository.SimpleUserRepository;
-import top.mikecao.openchat.web.vo.Auth;
+import top.mikecao.openchat.core.auth.Auth;
 
 /**
  * @author caohailong
@@ -37,6 +37,7 @@ public class AuthService {
                     tokenGranter.grant(new Account()
                             .setId(user.getId())
                             .setUsername(user.getEmail())))
+                //查询注册的聊天服务器的路由信息
                 .zipWith(registry.fetch())
                 .map(x ->
                     Result.ok(new Auth()

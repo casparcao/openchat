@@ -1,4 +1,4 @@
-package top.mikecao.openchat.web.vo;
+package top.mikecao.openchat.core.auth;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

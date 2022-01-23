@@ -1,6 +1,6 @@
-package top.mikecao.openchat.toolset.common.generators;
+package top.mikecao.openchat.core.common.generators;
 
-import top.mikecao.openchat.toolset.common.Generator;
+import top.mikecao.openchat.core.common.Generator;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
