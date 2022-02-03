@@ -40,7 +40,7 @@ public class LoginController implements Initializable {
                 .setAccount(email)
                 .setPassword(passwd);
 
-        Result<Auth> result = Client.request("http://localhost:8080/login", login, new TypeReference<>() {});
+        Result<Auth> result = Client.post("http://localhost:8080/login", login, new TypeReference<>() {});
         if(result.success()){
             Storage.store("E:/temp/.auth.json", result.getData());
             application.main(result.getData());

@@ -6,6 +6,8 @@ package top.mikecao.openchat.core.auth;
 
 public interface TokenGranter {
 
+    String HEADER = "Authorization";
+
     /**
      * 颁发token，根据认证信息颁发token
      * @param account 认证信息

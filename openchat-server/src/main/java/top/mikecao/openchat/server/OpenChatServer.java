@@ -12,6 +12,7 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,11 +28,13 @@ import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author mike
  */
 
+@Slf4j
 @Component
 public class OpenChatServer {
 
@@ -123,5 +126,15 @@ public class OpenChatServer {
         work.shutdownGracefully();
         loginExecutorGroup.shutdownGracefully();
         p2pChatExecutorGroup.shutdownGracefully();
+        try {
+            boolean success1 = boss.awaitTermination(60, TimeUnit.SECONDS);
+            boolean success2 = work.awaitTermination(60, TimeUnit.SECONDS);
+            if(!success1 || !success2){
+                log.error("等待EventLoop关闭失败");
+            }
+        }catch (InterruptedException e){
+            log.error("等待EventLoop关闭中断", e);
+            Thread.currentThread().interrupt();
+        }
     }
 }

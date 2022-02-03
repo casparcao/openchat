@@ -51,6 +51,8 @@ public class DefaultTokenGranter implements TokenGranter {
     @Override
     public Account resolve(String token) {
         int size = 2;
+        token = token.replace("bearer ", "")
+                .replace("Bearer ", "");
         String[] parts = token.split("\\.");
         if(parts.length != size){
             throw new AppAuthException("Token格式解析异常");

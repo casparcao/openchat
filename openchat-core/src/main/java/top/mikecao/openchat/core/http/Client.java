@@ -12,6 +12,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
+import static top.mikecao.openchat.core.auth.TokenGranter.HEADER;
+
 /**
  * @author caohailong
  */
@@ -27,11 +29,11 @@ public final class Client {
             .connectTimeout(Duration.ofSeconds(3))
             .build();
 
-    public static HttpClient get(){
+    public static HttpClient instance(){
         return INSTANCE;
     }
 
-    public static <T> T request(String uri, Object payload, TypeReference<T> type){
+    public static <T> T post(String uri, Object payload, TypeReference<T> type){
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .timeout(Duration.ofSeconds(5))
@@ -51,4 +53,27 @@ public final class Client {
         }
         return Json.from(response.body(), type);
     }
+
+    public static <T> T get(String uri, TypeReference<T> type, String token){
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .timeout(Duration.ofSeconds(5))
+                .header("Content-Type", "application/json")
+                .header(HEADER, token)
+                .GET()
+                .build();
+        HttpResponse<String> response;
+        try {
+            response = INSTANCE.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            log.error("请求失败>>", e);
+            throw new AppServerException("请求服务器资源失败");
+        } catch (InterruptedException e) {
+            log.error("线程异常中断>>", e);
+            Thread.currentThread().interrupt();
+            throw new AppServerException("线程异常中断");
+        }
+        return Json.from(response.body(), type);
+    }
+
 }

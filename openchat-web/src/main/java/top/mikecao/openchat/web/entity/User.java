@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -23,8 +24,8 @@ public class User {
     private String email;
     private String username;
     private String password;
-
     private Set<Room> rooms;
+    private Date createTime;
 
     @Data
     @Accessors(chain = true)
