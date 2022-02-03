@@ -17,6 +17,9 @@ import top.mikecao.openchat.core.serialize.Result;
 import java.net.*;
 import java.util.ResourceBundle;
 
+import static top.mikecao.openchat.client.config.Constants.LOGIN_ENDPOINT;
+import static top.mikecao.openchat.client.config.Constants.TOKEN_STORE_LOCATION;
+
 /**
  * @author mike
  */
@@ -40,9 +43,9 @@ public class LoginController implements Initializable {
                 .setAccount(email)
                 .setPassword(passwd);
 
-        Result<Auth> result = Client.post("http://localhost:8080/login", login, new TypeReference<>() {});
+        Result<Auth> result = Client.post(LOGIN_ENDPOINT, login, new TypeReference<>() {});
         if(result.success()){
-            Storage.store("E:/temp/.auth.json", result.getData());
+            Storage.store(TOKEN_STORE_LOCATION, result.getData());
             application.main(result.getData());
         }else{
             //提示密码错误

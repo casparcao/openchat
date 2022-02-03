@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -51,6 +52,8 @@ public class MainApplication extends javafx.application.Application {
             //存在，尝试连接服务器，连接成功直接跳转主页面
             main(auth);
         }
+        stage.getIcons().add(new Image(
+                Objects.requireNonNull(MainApplication.class.getResourceAsStream("/image/logo.png"))));
         stage.show();
     }
 

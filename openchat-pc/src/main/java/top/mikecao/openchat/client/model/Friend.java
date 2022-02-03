@@ -12,4 +12,9 @@ import lombok.experimental.Accessors;
 public class Friend {
     private long id;
     private String username;
+
+    @Override
+    public String toString(){
+        return username;
+    }
 }
