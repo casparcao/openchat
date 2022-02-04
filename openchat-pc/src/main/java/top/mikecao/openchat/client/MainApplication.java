@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+import static top.mikecao.openchat.client.config.Constants.TOKEN_STORE_LOCATION;
+
 /**
  * @author caohailong
  */
@@ -44,13 +46,13 @@ public class MainApplication extends javafx.application.Application {
         //1.1. 尝试使用本地token连接server，如果成功则直接跳转到主页面
         //1.2. 否则，跳转到登录页
         //2. 如果不存在token，跳转到登录页
-        Auth auth = Storage.load("E:/temp/.auth.json", Auth.class);
+        Auth auth = Storage.load(TOKEN_STORE_LOCATION, Auth.class);
         if(Objects.isNull(auth)){
             //无本地token，跳到登录页进行初次登录
             login();
         }else{
             //存在，尝试连接服务器，连接成功直接跳转主页面
-            main(auth);
+            main("a@b.com", auth);
         }
         stage.getIcons().add(new Image(
                 Objects.requireNonNull(MainApplication.class.getResourceAsStream("/image/logo.png"))));
@@ -61,10 +63,11 @@ public class MainApplication extends javafx.application.Application {
         LoginController login = (LoginController) paint("/fxml/login.fxml", 450, 325);
         login.application(this);
     }
-    public void main(Auth auth){
+    public void main(String email, Auth auth){
         this.connector = new Connector();
         connector.connect(auth.getToken(), auth.getServers());
         ChatController chat = (ChatController) paint("/fxml/chat.fxml", 800, 600);
+        chat.account(email);
         chat.application(this);
     }
 
@@ -94,4 +97,8 @@ public class MainApplication extends javafx.application.Application {
         return loader.getController();
     }
 
+    public void close(){
+        connector.close();
+        stage.close();
+    }
 }

@@ -104,6 +104,7 @@ public class Connector {
     }
 
     public void close(){
+        channel.close().syncUninterruptibly();
         worker.shutdownGracefully();
     }
 
