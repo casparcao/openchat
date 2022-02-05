@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
 /**
- * 本地文件的读写，文件内容为json格式
+ * 本地文件的读写，包括token的存储等
  * @author caohailong
  */
 

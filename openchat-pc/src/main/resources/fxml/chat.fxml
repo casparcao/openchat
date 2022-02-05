@@ -16,7 +16,7 @@
    <left>
       <BorderPane BorderPane.alignment="CENTER">
          <top>
-            <Label fx:id="labelAccount" text="openchat" BorderPane.alignment="CENTER">
+            <Label fx:id="labelAccount" text="本人姓名" BorderPane.alignment="CENTER">
                <font>
                   <Font size="16.0" />
                </font>
@@ -32,14 +32,14 @@
          <top>
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <items>
-                  <Label fx:id="labelThere" />
+                  <Label fx:id="labelThere" text="对方姓名" />
                </items>
             </ToolBar>
          </top>
          <center>
-            <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="tableMessages" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
+                <TableColumn fx:id="columnMessage" prefWidth="425.94958622695896" />
               </columns>
             </TableView>
          </center>
