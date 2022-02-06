@@ -97,6 +97,10 @@ public class MainApplication extends javafx.application.Application {
         return loader.getController();
     }
 
+    public Connector connector(){
+        return this.connector;
+    }
+
     public void close(){
         connector.close();
         stage.close();

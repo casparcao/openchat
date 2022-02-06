@@ -3,6 +3,7 @@ package top.mikecao.openchat.client.service.store;
 import top.mikecao.openchat.client.service.MsgStore;
 import top.mikecao.openchat.core.proto.Proto;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,13 +12,24 @@ import java.util.List;
  */
 
 public class SimpleFsMsgStore implements MsgStore {
+
     @Override
-    public void store(Proto.Chat chat, Callback... callbacks) {
+    public void store(Proto.Chat chat) {
         //...
     }
 
     @Override
-    public void store(List<Proto.Chat> chats, Callback... callbacks) {
+    public void store(List<Proto.Chat> chats) {
         //...
+    }
+
+    @Override
+    public void listener(Listener listener) {
+        //...
+    }
+
+    @Override
+    public List<Proto.Chat> load(long uid, long fid, long offset, long size) {
+        return Collections.emptyList();
     }
 }

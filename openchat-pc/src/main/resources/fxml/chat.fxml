@@ -49,7 +49,7 @@
                   <TextArea fx:id="txtContent" prefHeight="101.0" prefWidth="465.0" />
                   <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
                     <items>
-                      <Button fx:id="btnSend" mnemonicParsing="false" text="发送" />
+                      <Button fx:id="btnSend" mnemonicParsing="false" onMouseReleased="#onChatSubmit" text="发送" />
                     </items>
                   </ToolBar>
                </children>
@@ -58,7 +58,7 @@
       </BorderPane>
    </center>
    <top>
-      <Label fx:id="labelClose" alignment="TOP_RIGHT" onMouseReleased="#onMouseReleased" text="X" BorderPane.alignment="TOP_RIGHT">
+      <Label fx:id="labelClose" alignment="TOP_RIGHT" onMouseReleased="#onCloseAction" text="X" BorderPane.alignment="TOP_RIGHT">
          <padding>
             <Insets right="5.0" />
          </padding></Label>
