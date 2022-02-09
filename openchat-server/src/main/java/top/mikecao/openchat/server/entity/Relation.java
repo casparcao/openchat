@@ -3,6 +3,7 @@ package top.mikecao.openchat.server.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -14,7 +15,10 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @Document(value = "relation")
-@CompoundIndex(unique = true, name = "uk_u_f", def = "{'uid': 1, 'fid': 1}")
+@CompoundIndexes(value = {
+        @CompoundIndex(unique = true, name = "uk_u_f", def = "{'uid': 1, 'fid': 1}"),
+        @CompoundIndex(unique = true, name = "uk_r_u", def = "{'rid': 1, 'uid': 1}")
+})
 public class Relation {
 
     private long id;

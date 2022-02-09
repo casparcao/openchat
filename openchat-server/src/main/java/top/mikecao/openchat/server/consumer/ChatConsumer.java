@@ -10,11 +10,10 @@ import top.mikecao.openchat.core.serialize.MsgBuilder;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.server.config.RabbitConfig;
 import top.mikecao.openchat.server.entity.Chat;
-import top.mikecao.openchat.server.repository.SimpleRoomRepository;
+import top.mikecao.openchat.server.repository.SimpleRelationRepository;
 import top.mikecao.openchat.server.session.ChannelStore;
 
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * @author caohailong
@@ -27,7 +26,7 @@ public class ChatConsumer {
     @Autowired
     private ChannelStore channelStore;
     @Autowired
-    private SimpleRoomRepository simpleRoomRepository;
+    private SimpleRelationRepository simpleRelationRepository;
 
     @RabbitListener(queues = RabbitConfig.QUEUE_NAME)
     public void process(@Payload Chat chat) {
@@ -38,11 +37,8 @@ public class ChatConsumer {
     }
 
     private void push(Chat chat){
-        simpleRoomRepository.findById(chat.getRoom())
-                .subscribe(group -> {
-                    Set<Long> users = group.getUsers();
-                    users.forEach(user -> push0(user, chat));
-                });
+        simpleRelationRepository.findByRid(chat.getRoom())
+                .subscribe(relation -> push0(relation.getUid(), chat));
     }
 
     private void push0(long uid, Chat chat){
