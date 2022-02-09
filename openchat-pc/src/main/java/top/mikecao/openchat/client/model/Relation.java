@@ -9,12 +9,16 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class Friend {
-    private long id;
-    private String username;
+public class Relation {
+    private String name;
+    /** 聊天室id */
+    private long rid;
+    /** 已读消息最大偏移量 */
+    private long offset;
+    private boolean group;
 
     @Override
     public String toString(){
-        return username;
+        return name;
     }
 }

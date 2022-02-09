@@ -1,14 +1,15 @@
-package top.mikecao.openchat.client.service;
+package top.mikecao.openchat.client.service.chat;
 
 import top.mikecao.openchat.core.proto.Proto;
 
 import java.util.List;
 
 /**
+ * 消息存储服务
  * @author caohailong
  */
 
-public interface MsgStore {
+public interface ChatStore {
 
     /**
      * 存储一条聊天记录
@@ -19,7 +20,6 @@ public interface MsgStore {
     /**
      * 存储多条聊天记录
      * @param chats 聊天记录
-     * @param listeners 聊天记录存储后的处理逻辑
      */
     void store(List<Proto.Chat> chats);
 
@@ -30,14 +30,13 @@ public interface MsgStore {
     void listener(Listener listener);
 
     /**
-     * 加载指定用户{@code uid}的好友{@code fid}的聊天记录
-     * @param uid 用户
-     * @param fid 好友
+     * 加载指定聊天室{@code rid}的聊天记录
+     * @param rid 聊天室
      * @param offset 偏移量
      * @param size 条数
      * @return 聊天记录
      */
-    List<Proto.Chat> load(long uid, long fid, long offset, long size);
+    List<Proto.Chat> load(long rid, long offset, long size);
 
 
     interface Listener {

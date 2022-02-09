@@ -1,6 +1,6 @@
-package top.mikecao.openchat.client.service.store;
+package top.mikecao.openchat.client.service.chat.store;
 
-import top.mikecao.openchat.client.service.MsgStore;
+import top.mikecao.openchat.client.service.chat.ChatStore;
 import top.mikecao.openchat.core.proto.Proto;
 
 import java.util.Collections;
@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author caohailong
  */
 
-public class RdbmsMsgStore implements MsgStore {
+public class RdbmsChatStore implements ChatStore {
 
     private final List<Listener> listeners = new LinkedList<>();
 
@@ -39,7 +39,7 @@ public class RdbmsMsgStore implements MsgStore {
     }
 
     @Override
-    public List<Proto.Chat> load(long uid, long fid, long offset, long size) {
+    public List<Proto.Chat> load(long rid, long offset, long size) {
         return Collections.emptyList();
     }
 }

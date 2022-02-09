@@ -1,8 +1,8 @@
-package top.mikecao.openchat.client.service.listener;
+package top.mikecao.openchat.client.service.chat.listener;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import top.mikecao.openchat.client.service.MsgStore;
+import top.mikecao.openchat.client.service.chat.ChatStore;
 import top.mikecao.openchat.core.proto.Proto;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.Objects;
  * @author caohailong
  */
 
-public class ChatTableUpdater implements MsgStore.Listener {
+public class ChatTableUpdater implements ChatStore.Listener {
 
     /**
      * 表格数据绑定的引用

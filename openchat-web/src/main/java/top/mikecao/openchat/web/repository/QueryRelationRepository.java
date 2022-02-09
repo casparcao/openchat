@@ -6,8 +6,7 @@ import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
-import top.mikecao.openchat.web.entity.Relation;
-import top.mikecao.openchat.web.vo.Friends;
+import top.mikecao.openchat.web.vo.Relation;
 
 /**
  * @author caohailong
@@ -19,8 +18,9 @@ public class QueryRelationRepository {
     @Autowired
     private ReactiveMongoTemplate mongoTemplate;
 
-    public Flux<Friends> list(long uid){
+    public Flux<Relation> list(long uid){
         MatchOperation preMatch = new MatchOperation(Criteria.where("uid").is(uid));
+        //todo 需要关联群组表
         LookupOperation lookup = LookupOperation.newLookup()
                 .from("user")
                 .localField("fid")
@@ -28,15 +28,17 @@ public class QueryRelationRepository {
                 .as("friend");
         UnwindOperation unwind = Aggregation.unwind("friend");
         ProjectionOperation projection = Aggregation.project(
-                "friend.username",
-                        "friend._id"
+                "friend.name",
+                        "friend._id",
+                        "rid",
+                        "offset", "group"
         );
 
-        TypedAggregation<Relation> aggregation = Aggregation.newAggregation(Relation.class,
+        TypedAggregation<top.mikecao.openchat.web.entity.Relation> aggregation = Aggregation.newAggregation(top.mikecao.openchat.web.entity.Relation.class,
                 preMatch,
                 lookup,
                 unwind,
                 projection);
-        return mongoTemplate.aggregate(aggregation, Relation.class, Friends.class);
+        return mongoTemplate.aggregate(aggregation, top.mikecao.openchat.web.entity.Relation.class, Relation.class);
     }
 }

@@ -1,29 +1,26 @@
-package top.mikecao.openchat.web.entity;
+package top.mikecao.openchat.server.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
 /**
+ * 群聊组
  * @author caohailong
  */
 
 @Data
 @Accessors(chain = true)
-@Document(value = "user")
-public class User {
-
+@Document("group")
+public class Group {
     @Id
     private long id;
-    @Indexed(unique = true)
-    private String email;
-    private String username;
-    private String password;
-    /** 创建时间*/
+    private String name;
+    /** 创建人 */
+    private long creator;
+    /** 创建时间 */
     private Date ts;
-
 }

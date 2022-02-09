@@ -1,7 +1,7 @@
-package top.mikecao.openchat.client.service.listener;
+package top.mikecao.openchat.client.service.chat.listener;
 
 import top.mikecao.openchat.client.connection.Connector;
-import top.mikecao.openchat.client.service.MsgStore;
+import top.mikecao.openchat.client.service.chat.ChatStore;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.core.serialize.MsgBuilder;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @author caohailong
  */
 
-public class ChatMsgSender implements MsgStore.Listener {
+public class ChatMsgSender implements ChatStore.Listener {
 
     private final Connector connector;
     private final String token;

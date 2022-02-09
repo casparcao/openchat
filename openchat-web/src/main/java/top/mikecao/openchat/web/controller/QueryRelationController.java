@@ -4,11 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.TokenGranter;
-import top.mikecao.openchat.web.service.FriendService;
-import top.mikecao.openchat.web.vo.Friends;
+import top.mikecao.openchat.core.serialize.Result;
+import top.mikecao.openchat.web.service.QueryRelationService;
+import top.mikecao.openchat.web.vo.Relation;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static top.mikecao.openchat.core.auth.TokenGranter.HEADER;
 
@@ -18,16 +22,18 @@ import static top.mikecao.openchat.core.auth.TokenGranter.HEADER;
  */
 
 @RestController
-public class FriendController {
+public class QueryRelationController {
 
     @Autowired
     private TokenGranter granter;
     @Autowired
-    private FriendService friendService;
+    private QueryRelationService queryRelationService;
 
-    @GetMapping("/friends")
-    public Flux<Friends> list(@RequestHeader(HEADER) String token){
+    @GetMapping("/relations")
+    public Mono<Result<List<Relation>>> list(@RequestHeader(HEADER) String token){
         Account account = granter.resolve(token);
-        return friendService.list(account.getId());
+        return queryRelationService.list(account.getId())
+                .collect(Collectors.toList())
+                .map(Result::ok);
     }
 }

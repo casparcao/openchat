@@ -7,7 +7,7 @@ import top.mikecao.openchat.core.serialize.Result;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.TokenGranter;
 import top.mikecao.openchat.core.registry.Registry;
-import top.mikecao.openchat.web.command.LoginCommand;
+import top.mikecao.openchat.web.cmd.LoginCmd;
 import top.mikecao.openchat.web.entity.User;
 import top.mikecao.openchat.web.repository.SimpleUserRepository;
 import top.mikecao.openchat.core.auth.Auth;
@@ -26,7 +26,7 @@ public class AuthService {
     @Autowired
     private Registry registry;
 
-    public Mono<Result<Auth>> auth(LoginCommand command){
+    public Mono<Result<Auth>> auth(LoginCmd command){
         //1. 校验身份，通过，颁发令牌
         Mono<User> mono = simpleUserRepository.findByEmail(command.getAccount());
         //只有用户存在，并且密码校验通过才算登录成功

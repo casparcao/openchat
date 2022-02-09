@@ -1,4 +1,4 @@
-package top.mikecao.openchat.web.entity;
+package top.mikecao.openchat.server.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -22,11 +22,11 @@ public class Relation {
     private long uid;
     /** 好友id，群组id */
     private long fid;
-    /** 聊天室id，如果是群组，则群组id=房间id(fid=rid) */
+    /** 聊天室id */
     private long rid;
     /** 是否是群聊 */
     private boolean group;
-    /** 创建时间*/
+    /** 加入时间 */
     private Date ts;
     /** 已读最大消息的偏移量 */
     private long offset;

@@ -1,4 +1,4 @@
-package top.mikecao.openchat.web.command;
+package top.mikecao.openchat.web.cmd;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class LoginCommand {
+public class LoginCmd {
 
     private String account;
     private String password;

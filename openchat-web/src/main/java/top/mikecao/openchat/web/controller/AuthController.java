@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import top.mikecao.openchat.core.serialize.Result;
-import top.mikecao.openchat.web.command.LoginCommand;
+import top.mikecao.openchat.web.cmd.LoginCmd;
 import top.mikecao.openchat.web.service.AuthService;
 import top.mikecao.openchat.core.auth.Auth;
 
@@ -22,7 +22,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public Mono<Result<Auth>> login (@RequestBody @Validated LoginCommand command){
+    public Mono<Result<Auth>> login (@RequestBody @Validated LoginCmd command){
         return authService.auth(command);
     }
 }

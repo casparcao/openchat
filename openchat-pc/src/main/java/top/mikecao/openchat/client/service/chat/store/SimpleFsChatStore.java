@@ -1,6 +1,6 @@
-package top.mikecao.openchat.client.service.store;
+package top.mikecao.openchat.client.service.chat.store;
 
-import top.mikecao.openchat.client.service.MsgStore;
+import top.mikecao.openchat.client.service.chat.ChatStore;
 import top.mikecao.openchat.core.proto.Proto;
 
 import java.util.Collections;
@@ -11,7 +11,7 @@ import java.util.List;
  * @author caohailong
  */
 
-public class SimpleFsMsgStore implements MsgStore {
+public class SimpleFsChatStore implements ChatStore {
 
     @Override
     public void store(Proto.Chat chat) {
@@ -29,7 +29,7 @@ public class SimpleFsMsgStore implements MsgStore {
     }
 
     @Override
-    public List<Proto.Chat> load(long uid, long fid, long offset, long size) {
+    public List<Proto.Chat> load(long rid, long offset, long size) {
         return Collections.emptyList();
     }
 }

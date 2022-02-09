@@ -4,13 +4,17 @@ package top.mikecao.openchat.client.config;
  * @author caohailong
  */
 
-public interface Constants {
+public final class Constants {
 
-    String WEB_SERVER_HOST = "http://localhost:8080";
+    private Constants(){}
 
-    String FRIENDS_ENDPOINT = WEB_SERVER_HOST + "/friends";
+    public static final String WEB_SERVER_HOST = "http://localhost:8080";
 
-    String TOKEN_STORE_LOCATION = "E:/temp/.auth.json";
+    public static final String RELATIONS_ENDPOINT = WEB_SERVER_HOST + "/relations";
 
-    String LOGIN_ENDPOINT = WEB_SERVER_HOST + "/login";
+    public static final String TOKEN_STORE_LOCATION = "E:/temp/.auth.json";
+
+    public static final String LOGIN_ENDPOINT = WEB_SERVER_HOST + "/login";
+
+    public static final String ROOM_ENDPOINT = WEB_SERVER_HOST + "/rooms";
 }
