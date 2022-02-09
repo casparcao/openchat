@@ -164,6 +164,6 @@ public class ChatController implements Initializable {
                 .setSpeaker(account.getId())
                 .setType(Proto.ChatType.TEXT)
                 .build();
-        chatStore.store(chat);
+        chatStore.store(false, chat);
     }
 }

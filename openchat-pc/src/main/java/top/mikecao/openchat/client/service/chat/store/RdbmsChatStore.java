@@ -18,19 +18,19 @@ public class RdbmsChatStore implements ChatStore {
     private final List<Listener> listeners = new LinkedList<>();
 
     @Override
-    public void store(Proto.Chat chat) {
+    public void store(boolean there, Proto.Chat chat) {
         //存储
 
         //回调
         Objects.requireNonNull(listeners, "回调函数不可为空")
-                .forEach(cb -> cb.process(chat.getRoom(), Collections.singletonList(chat)));
+                .forEach(cb -> cb.process(there, chat.getRoom(), Collections.singletonList(chat)));
     }
 
     @Override
-    public void store(List<Proto.Chat> chats) {
+    public void store(boolean there, List<Proto.Chat> chats) {
 
         Objects.requireNonNull(listeners, "回调函数不可为空")
-                .forEach(cb -> cb.process(chats.get(0).getRoom(), chats));
+                .forEach(cb -> cb.process(there, chats.get(0).getRoom(), chats));
     }
 
     @Override

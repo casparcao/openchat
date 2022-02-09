@@ -13,15 +13,17 @@ public interface ChatStore {
 
     /**
      * 存储一条聊天记录
+     * @param there 是否是对方发送的消息
      * @param chat 聊天记录
      */
-    void store(Proto.Chat chat);
+    void store(boolean there, Proto.Chat chat);
 
     /**
      * 存储多条聊天记录
+     * @param there 是否是对方发送的消息
      * @param chats 聊天记录
      */
-    void store(List<Proto.Chat> chats);
+    void store(boolean there, List<Proto.Chat> chats);
 
     /**
      * 添加监听器
@@ -43,10 +45,11 @@ public interface ChatStore {
 
         /**
          * 回调逻辑的处理
-         * @param fid 好友id
+         * @param there 是否是对方的消息
+         * @param rid 聊天室id
          * @param chats chats
          */
-        void process(long fid, List<Proto.Chat> chats);
+        void process(boolean there, long rid, List<Proto.Chat> chats);
 
     }
 

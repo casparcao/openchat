@@ -23,10 +23,10 @@ public class ChatMsgSender implements ChatStore.Listener {
     }
 
     @Override
-    public void process(long fid, List<Proto.Chat> chats) {
+    public void process(boolean there, long rid, List<Proto.Chat> chats) {
         chats.forEach(chat -> {
             //如果是好友的消息则不需要再发送回服务器了
-            if(chat.getSpeaker() == fid){
+            if(there){
                 return;
             }
             Proto.Message msg = MsgBuilder.get(Proto.MsgType.SEND)

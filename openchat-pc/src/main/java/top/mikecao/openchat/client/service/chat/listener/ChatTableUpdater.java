@@ -27,8 +27,8 @@ public class ChatTableUpdater implements ChatStore.Listener {
     }
 
     @Override
-    public void process(long fid, List<Proto.Chat> chats) {
-        ObservableList<Proto.Chat> observableList = map.compute(fid, (key, exists) -> {
+    public void process(boolean there, long rid, List<Proto.Chat> chats) {
+        ObservableList<Proto.Chat> observableList = map.compute(rid, (key, exists) -> {
             if(Objects.isNull(exists)){
                 return FXCollections.observableList(new ArrayList<>());
             }

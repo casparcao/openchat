@@ -14,12 +14,12 @@ import java.util.List;
 public class SimpleFsChatStore implements ChatStore {
 
     @Override
-    public void store(Proto.Chat chat) {
+    public void store(boolean there, Proto.Chat chat) {
         //...
     }
 
     @Override
-    public void store(List<Proto.Chat> chats) {
+    public void store(boolean there, List<Proto.Chat> chats) {
         //...
     }
 
