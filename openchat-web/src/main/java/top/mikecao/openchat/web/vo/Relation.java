@@ -18,4 +18,6 @@ public class Relation {
     /** 已读消息最大偏移量 */
     private long offset;
     private boolean group;
+    private long max;
+
 }

@@ -44,6 +44,7 @@ public class ChatConsumer {
     private void push0(long uid, Chat chat){
         Channel channel = channelStore.load(uid);
         if (Objects.nonNull(channel) && channel.isActive()) {
+            log.info("用户在线，推送消息>>" + uid);
             channel.writeAndFlush(wrap(chat));
         }
     }

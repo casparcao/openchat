@@ -158,9 +158,12 @@ public class ChatController implements Initializable {
     public void onChatSubmit(MouseEvent mouseEvent){
         log.info("发送按钮触发>>" + mouseEvent.getEventType().getName());
         String text = txtContent.getText();
+        Relation current = friendsListView.getSelectionModel()
+                .selectedItemProperty()
+                .get();
         Proto.Chat chat = Proto.Chat.newBuilder()
                 .setMessage(text)
-                .setRoom(0L)
+                .setRoom(current.getRid())
                 .setSpeaker(account.getId())
                 .setType(Proto.ChatType.TEXT)
                 .build();

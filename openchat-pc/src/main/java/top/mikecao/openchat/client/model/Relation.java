@@ -16,9 +16,11 @@ public class Relation {
     /** 已读消息最大偏移量 */
     private long offset;
     private boolean group;
+    /** 该聊天室中最大消息id max > offset则标识有未读消息*/
+    private long max;
 
     @Override
     public String toString(){
-        return name;
+        return name + (max > offset ? "(" + (max - offset) + ")" : "");
     }
 }

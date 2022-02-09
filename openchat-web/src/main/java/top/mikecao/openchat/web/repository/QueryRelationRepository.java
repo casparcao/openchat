@@ -31,7 +31,9 @@ public class QueryRelationRepository {
                 "friend.name",
                         "friend._id",
                         "rid",
-                        "offset", "group"
+                        "offset",
+                        "group",
+                        "max"
         );
 
         TypedAggregation<top.mikecao.openchat.web.entity.Relation> aggregation = Aggregation.newAggregation(top.mikecao.openchat.web.entity.Relation.class,

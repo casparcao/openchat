@@ -34,4 +34,6 @@ public class Relation {
     private Date ts;
     /** 已读最大消息的偏移量 */
     private long offset;
+    /** 最大消息id max > offset标识有未读消息*/
+    private long max;
 }
