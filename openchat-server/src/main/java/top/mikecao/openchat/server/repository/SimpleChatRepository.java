@@ -1,7 +1,7 @@
 package top.mikecao.openchat.server.repository;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import top.mikecao.openchat.server.entity.Chat;
+import top.mikecao.openchat.core.entity.Chat;
 
 import java.util.List;
 

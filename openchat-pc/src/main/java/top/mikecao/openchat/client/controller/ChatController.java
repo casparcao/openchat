@@ -13,11 +13,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import lombok.extern.slf4j.Slf4j;
 import top.mikecao.openchat.client.MainApplication;
+import top.mikecao.openchat.client.model.Chat;
 import top.mikecao.openchat.client.model.Relation;
 import top.mikecao.openchat.client.service.chat.ChatStore;
-import top.mikecao.openchat.client.service.chat.listener.ChatMsgSender;
 import top.mikecao.openchat.client.service.chat.listener.ChatTableUpdater;
-import top.mikecao.openchat.client.service.chat.store.RdbmsChatStore;
+import top.mikecao.openchat.client.service.chat.store.RemoteChatStore;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.Auth;
 import top.mikecao.openchat.core.auth.TokenGranter;
@@ -55,7 +55,7 @@ public class ChatController implements Initializable {
     private Label labelClose;
     /** 聊天记录 */
     @FXML
-    private TableView<Proto.Chat> tableMessages;
+    private TableView<Chat> tableMessages;
     @FXML
     private TableColumn<String, String> columnMessage;
     /** 正在输入的内容 */
@@ -65,8 +65,8 @@ public class ChatController implements Initializable {
     @FXML
     private Button btnSend;
     /** 消息记录列表数据源 ，每个key对应一个好友*/
-    private final Map<Long, ObservableList<Proto.Chat>> messages = new HashMap<>(32);
-    private final ChatStore chatStore = new RdbmsChatStore();
+    private final Map<Long, ObservableList<Chat>> messages = new HashMap<>(32);
+    private ChatStore chatStore;
     private final TokenGranter tokenGranter = new DefaultTokenGranter(Json.mapper());
     private Account account;
     private Auth auth;
@@ -79,8 +79,13 @@ public class ChatController implements Initializable {
 
     public void application(MainApplication application){
         this.application = application;
-        ChatMsgSender chatMsgSender = new ChatMsgSender(this.application.connector(), this.auth.getToken());
-        chatStore.listener(chatMsgSender);
+        chatStore = new RemoteChatStore(this.application.connector(), this.auth.getToken());
+
+        executorService.execute(() -> {
+            init();
+            //加载好友列表
+            relations();
+        });
     }
 
     public void account(String account){
@@ -89,11 +94,7 @@ public class ChatController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        executorService.execute(() -> {
-            init();
-            //加载好友列表
-            relations();
-        });
+        //...
     }
 
     private void init() {
@@ -106,8 +107,6 @@ public class ChatController implements Initializable {
         ChatTableUpdater chatTableUpdater = new ChatTableUpdater(messages);
         //配置消息存储器
         chatStore.listener(chatTableUpdater);
-
-
     }
 
     /** 加载好友列表 */
@@ -132,17 +131,17 @@ public class ChatController implements Initializable {
 
     private void reload(Relation relation){
         //获取当前好友的绑定列表，如果不存在，创建新列表
-        ObservableList<Proto.Chat> observableList
+        ObservableList<Chat> observableList
                 = messages.compute(relation.getRid(), (key, exists) -> {
             if(Objects.isNull(exists)){
                 //初次加载，加载最新20条聊天消息
-                List<Proto.Chat> chats
+                List<Chat> chats
                         = chatStore.load(relation.getRid(), 0L, 20L);
                 return FXCollections.observableList(new ArrayList<>(chats));
             }
             return exists;
         });
-        IntStream.range(0, 50).forEach(i -> observableList.add(Proto.Chat.newBuilder().setMessage(i+"").build()));
+        IntStream.range(0, 50).forEach(i -> observableList.add(new Chat().setMessage(i+"")));
         Platform.runLater(() -> {
             columnMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
             tableMessages.setItems(observableList);
@@ -161,12 +160,11 @@ public class ChatController implements Initializable {
         Relation current = friendsListView.getSelectionModel()
                 .selectedItemProperty()
                 .get();
-        Proto.Chat chat = Proto.Chat.newBuilder()
+        Chat chat = new Chat()
                 .setMessage(text)
                 .setRoom(current.getRid())
                 .setSpeaker(account.getId())
-                .setType(Proto.ChatType.TEXT)
-                .build();
+                .setType(Proto.ChatType.TEXT);
         chatStore.store(false, chat);
     }
 }

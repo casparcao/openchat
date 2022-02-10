@@ -2,7 +2,7 @@ package top.mikecao.openchat.server.repository;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Mono;
-import top.mikecao.openchat.server.entity.User;
+import top.mikecao.openchat.core.entity.User;
 
 /**
  * @author caohailong

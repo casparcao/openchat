@@ -9,13 +9,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
+ * 消息接受器，接受服务器推送的消息
  * @author mike
  */
 @Slf4j
-public class AuthHandler extends SimpleChannelInboundHandler<Proto.Message> {
+public class MsgAcceptor extends SimpleChannelInboundHandler<Proto.Message> {
 
     private final String token;
-    public AuthHandler(String token){
+    public MsgAcceptor(String token){
        this.token = token;
     }
     @Override
@@ -25,15 +26,14 @@ public class AuthHandler extends SimpleChannelInboundHandler<Proto.Message> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        //一旦通道激活，发送当前用户token进行验证
-        //验证失败后，token过期，关闭通道，并执行回调，重新登录获取最新token
-            Proto.Message message = Proto.Message.newBuilder()
-                    .setId(ThreadLocalRandom.current().nextInt(1000))
-                    .setTs(System.currentTimeMillis())
-                    .setType(Proto.MsgType.LOGIN)
-                    //.setLogin(loginRequest)
-                    .build();
-            ctx.writeAndFlush(message);
+        //一旦通道激活，拉取未读消息
+        Proto.Message message = Proto.Message.newBuilder()
+                .setId(ThreadLocalRandom.current().nextInt(1000))
+                .setTs(System.currentTimeMillis())
+                .setType(Proto.MsgType.PULL)
+                //.setLogin(loginRequest)
+                .build();
+        ctx.writeAndFlush(message);
     }
 
 }

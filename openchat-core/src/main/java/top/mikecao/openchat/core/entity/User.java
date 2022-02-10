@@ -1,4 +1,4 @@
-package top.mikecao.openchat.server.entity;
+package top.mikecao.openchat.core.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

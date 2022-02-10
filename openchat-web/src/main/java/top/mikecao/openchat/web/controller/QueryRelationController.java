@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.TokenGranter;
+import top.mikecao.openchat.core.entity.Relation;
 import top.mikecao.openchat.core.serialize.Result;
 import top.mikecao.openchat.web.service.QueryRelationService;
-import top.mikecao.openchat.web.vo.Relation;
 
 import java.util.List;
 import java.util.stream.Collectors;

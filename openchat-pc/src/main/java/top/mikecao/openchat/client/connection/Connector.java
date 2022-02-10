@@ -11,7 +11,7 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import lombok.extern.slf4j.Slf4j;
-import top.mikecao.openchat.client.handler.AuthHandler;
+import top.mikecao.openchat.client.handler.MsgAcceptor;
 import top.mikecao.openchat.core.exception.AppServerException;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.core.registry.Server;
@@ -75,7 +75,7 @@ public class Connector {
                                 .addLast("ProtobufDecoder", new ProtobufDecoder(Proto.Message.getDefaultInstance()))
                                 .addLast("FrameEncoder", new ProtobufVarint32LengthFieldPrepender())
                                 .addLast("ProtobufEncoder", new ProtobufEncoder())
-                                .addLast(new AuthHandler(token));
+                                .addLast(new MsgAcceptor(token));
                     }
                 });
         try{

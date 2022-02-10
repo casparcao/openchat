@@ -19,7 +19,7 @@ public class UserQueryService implements UserLoader {
 
     @Override
     public Mono<User> load(String account) {
-        Mono<top.mikecao.openchat.server.entity.User> optional
+        Mono<top.mikecao.openchat.core.entity.User> optional
                 = repository.findByEmail(account);
         return optional.map(db -> new User()
                 .setId(db.getId())

@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.mikecao.openchat.core.proto.Proto;
-import top.mikecao.openchat.server.entity.Chat;
+import top.mikecao.openchat.core.entity.Chat;
 import top.mikecao.openchat.server.producer.MsgProducer;
 import top.mikecao.openchat.server.repository.SimpleChatRepository;
 import top.mikecao.openchat.server.service.MaxRoomChatIdService;

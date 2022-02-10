@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import top.mikecao.openchat.core.serialize.MsgBuilder;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.server.config.RabbitConfig;
-import top.mikecao.openchat.server.entity.Chat;
+import top.mikecao.openchat.core.entity.Chat;
 import top.mikecao.openchat.server.repository.SimpleRelationRepository;
 import top.mikecao.openchat.server.session.ChannelStore;
 

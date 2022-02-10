@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 import top.mikecao.openchat.core.common.Generator;
 import top.mikecao.openchat.core.serialize.Result;
 import top.mikecao.openchat.web.cmd.RelationCreateCmd;
-import top.mikecao.openchat.web.entity.Relation;
+import top.mikecao.openchat.core.entity.Relation;
 import top.mikecao.openchat.web.repository.SimpleRelationRepository;
 
 import java.util.Date;

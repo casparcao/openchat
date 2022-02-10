@@ -15,6 +15,8 @@ public class Result<T> {
     private String msg;
     @Getter
     private T data;
+    @Getter
+    private long total;
 
     private Result(){
     }
@@ -86,6 +88,11 @@ public class Result<T> {
 
     public Result<T> data(T data){
         this.data = data;
+        return this;
+    }
+
+    public Result<T> total(long total){
+        this.total = total;
         return this;
     }
 

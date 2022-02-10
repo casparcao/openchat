@@ -3,12 +3,12 @@ package top.mikecao.openchat.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import top.mikecao.openchat.core.entity.User;
 import top.mikecao.openchat.core.serialize.Result;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.TokenGranter;
 import top.mikecao.openchat.core.registry.Registry;
 import top.mikecao.openchat.web.cmd.LoginCmd;
-import top.mikecao.openchat.web.entity.User;
 import top.mikecao.openchat.web.repository.SimpleUserRepository;
 import top.mikecao.openchat.core.auth.Auth;
 
