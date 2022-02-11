@@ -21,8 +21,8 @@ public class QueryChatService {
     private QueryChatRepository queryChatRepository;
 
     public Mono<Result<List<Chat>>> list(long rid, int page, int size) {
-        Flux<Chat> flux = queryChatRepository.findByRid(rid, page, size);
-        Mono<Long> mono = queryChatRepository.countByRid(rid);
+        Flux<Chat> flux = queryChatRepository.findByRoom(rid, page, size);
+        Mono<Long> mono = queryChatRepository.countByRoom(rid);
         return flux.collectList()
                 .map(Result::ok)
                 .zipWith(mono)

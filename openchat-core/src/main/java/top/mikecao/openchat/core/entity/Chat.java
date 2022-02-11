@@ -1,10 +1,12 @@
 package top.mikecao.openchat.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import top.mikecao.openchat.core.common.Strings;
 import top.mikecao.openchat.core.proto.Proto;
 
 import java.util.Date;
@@ -32,6 +34,7 @@ public class Chat {
     private long room;
     private Proto.ChatType type;
     private String message;
+    @JsonFormat(pattern = Strings.DATE_TIME)
     private Date ts;
 
 }

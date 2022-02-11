@@ -21,6 +21,6 @@ public class Relation {
 
     @Override
     public String toString(){
-        return name + (max > offset ? "(" + (max - offset) + ")" : "");
+        return rid + (max > offset ? "(" + (max - offset) + ")" : "");
     }
 }

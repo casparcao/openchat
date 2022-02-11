@@ -25,4 +25,8 @@ public class Chat {
     private Proto.ChatType type;
     private String message;
     private Date ts;
+
+    public String getMessage(){
+        return speaker + "(" + ts + ") : " + message;
+    }
 }

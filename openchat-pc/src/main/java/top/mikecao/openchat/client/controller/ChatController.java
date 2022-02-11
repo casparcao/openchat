@@ -79,7 +79,6 @@ public class ChatController implements Initializable {
 
     public void application(MainApplication application){
         this.application = application;
-        chatStore = new RemoteChatStore(this.application.connector(), this.auth.getToken());
 
         executorService.execute(() -> {
             init();
@@ -103,6 +102,7 @@ public class ChatController implements Initializable {
             log.error("无Token信息");
             throw new AppServerException("无认证信息");
         }
+        chatStore = new RemoteChatStore(this.application.connector(), this.auth.getToken());
         account = tokenGranter.resolve(auth.getToken());
         ChatTableUpdater chatTableUpdater = new ChatTableUpdater(messages);
         //配置消息存储器
@@ -141,7 +141,6 @@ public class ChatController implements Initializable {
             }
             return exists;
         });
-        IntStream.range(0, 50).forEach(i -> observableList.add(new Chat().setMessage(i+"")));
         Platform.runLater(() -> {
             columnMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
             tableMessages.setItems(observableList);

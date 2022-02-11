@@ -19,16 +19,16 @@ public class QueryChatRepository {
     @Autowired
     private ReactiveMongoTemplate template;
 
-    public Flux<Chat> findByRid(long rid, int page, int size) {
-        Criteria criteria = Criteria.where("rid").is(rid);
+    public Flux<Chat> findByRoom(long rid, int page, int size) {
+        Criteria criteria = Criteria.where("room").is(rid);
         Query query = Query.query(criteria);
         //page is zero based
         query.skip((long)page * size).limit(size);
         return template.find(query, Chat.class);
     }
 
-    public Mono<Long> countByRid(long rid) {
-        Criteria criteria = Criteria.where("rid").is(rid);
+    public Mono<Long> countByRoom(long rid) {
+        Criteria criteria = Criteria.where("room").is(rid);
         Query query = Query.query(criteria);
         return template.count(query, Chat.class);
     }
