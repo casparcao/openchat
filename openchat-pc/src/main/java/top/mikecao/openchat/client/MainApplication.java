@@ -61,8 +61,8 @@ public class MainApplication extends javafx.application.Application {
         login.application(this);
     }
     public void main(String email, Auth auth){
-        this.connector = new Connector();
-        connector.connect(auth.getToken(), auth.getServers());
+        connector = new Connector();
+        connector.connect(auth);
         ChatController chat = (ChatController) paint("/fxml/chat.fxml", 800, 600);
         chat.account(email);
         chat.application(this);

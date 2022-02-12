@@ -1,5 +1,8 @@
 package top.mikecao.openchat.core.common;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -18,4 +21,9 @@ public final class Strings {
     }
 
     public static final String DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+
+    public static String format(Date date){
+        DateFormat formatter = new SimpleDateFormat(DATE_TIME);
+        return formatter.format(date);
+    }
 }

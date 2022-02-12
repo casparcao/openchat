@@ -2,6 +2,7 @@ package top.mikecao.openchat.client.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import top.mikecao.openchat.core.common.Strings;
 import top.mikecao.openchat.core.proto.Proto;
 
 import java.util.Date;
@@ -27,6 +28,6 @@ public class Chat {
     private Date ts;
 
     public String getMessage(){
-        return speaker + "(" + ts + ") : " + message;
+        return speaker + "(" + Strings.format(ts) + ") : " + message;
     }
 }

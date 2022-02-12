@@ -22,7 +22,7 @@ message Message{
 }
 
 enum MsgType {
-    LOGIN = 0; //登录
+    INIT = 0; //初始化
     SEND = 1; //发送消息
     PUSH = 2; //推送消息
     ACK = 3; //接收到并阅读了消息
@@ -40,6 +40,7 @@ message Chat {
     uint64 room = 2; //所发生的聊天室id
     ChatType type = 3;
     string message = 4;
+    uint64 ts = 5;
 }
 
 message Room {

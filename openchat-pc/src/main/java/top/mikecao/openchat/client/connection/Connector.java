@@ -11,7 +11,10 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import lombok.extern.slf4j.Slf4j;
+import top.mikecao.openchat.client.handler.InitHandler;
 import top.mikecao.openchat.client.handler.MsgAcceptor;
+import top.mikecao.openchat.client.service.chat.ChatStore;
+import top.mikecao.openchat.core.auth.Auth;
 import top.mikecao.openchat.core.exception.AppServerException;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.core.registry.Server;
@@ -21,7 +24,6 @@ import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -34,11 +36,14 @@ public class Connector {
 
     private final EventLoopGroup worker = new NioEventLoopGroup();
     private Channel channel;
+    private final MsgAcceptor acceptor = new MsgAcceptor();
+    private final InitHandler initializer = new InitHandler();
 
-    public void connect(String token, List<Server> servers) {
-        for (Server server: servers) {
+    public void connect(Auth auth) {
+        this.initializer.token(auth.getToken());
+        for (Server server: auth.getServers()) {
             //依次尝试每个server
-            Channel ch = connect0(server.getIp(), server.getPort(), token);
+            Channel ch = connect0(server.getIp(), server.getPort());
             if(Objects.nonNull(ch)){
                 this.channel = ch;
                 break;
@@ -49,7 +54,7 @@ public class Connector {
         }
     }
 
-    private Channel connect0(String host, int port, String token) {
+    private Channel connect0(String host, int port){
         SslContext sslCtx ;
         try {
             sslCtx = buildSslContext();
@@ -75,7 +80,8 @@ public class Connector {
                                 .addLast("ProtobufDecoder", new ProtobufDecoder(Proto.Message.getDefaultInstance()))
                                 .addLast("FrameEncoder", new ProtobufVarint32LengthFieldPrepender())
                                 .addLast("ProtobufEncoder", new ProtobufEncoder())
-                                .addLast(new MsgAcceptor(token));
+                                .addLast(initializer)
+                                .addLast(acceptor);
                     }
                 });
         try{
@@ -99,8 +105,8 @@ public class Connector {
         return this.channel;
     }
 
-    public void channel(Channel channel){
-        this.channel = channel;
+    public void store(ChatStore store){
+        this.acceptor.store(store);
     }
 
     public void close(){

@@ -64,7 +64,7 @@ public class ChatController implements Initializable {
     /** 发送按钮 */
     @FXML
     private Button btnSend;
-    /** 消息记录列表数据源 ，每个key对应一个好友*/
+    /** 消息记录列表数据源 ，每个key对应一个房间*/
     private final Map<Long, ObservableList<Chat>> messages = new HashMap<>(32);
     private ChatStore chatStore;
     private final TokenGranter tokenGranter = new DefaultTokenGranter(Json.mapper());
@@ -107,6 +107,7 @@ public class ChatController implements Initializable {
         ChatTableUpdater chatTableUpdater = new ChatTableUpdater(messages);
         //配置消息存储器
         chatStore.listener(chatTableUpdater);
+        this.application.connector().store(chatStore);
     }
 
     /** 加载好友列表 */
@@ -163,7 +164,9 @@ public class ChatController implements Initializable {
                 .setMessage(text)
                 .setRoom(current.getRid())
                 .setSpeaker(account.getId())
+                .setTs(new Date())
                 .setType(Proto.ChatType.TEXT);
         chatStore.store(false, chat);
+        txtContent.setText("");
     }
 }

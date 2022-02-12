@@ -55,6 +55,7 @@ public class ChatConsumer {
                 .setRoom(chat.getRoom())
                 .setSpeaker(chat.getSpeaker())
                 .setMessage(chat.getMessage())
+                .setTs(chat.getTs().getTime())
                 .build();
         Proto.Push push = Proto.Push.newBuilder()
                 .setChat(pc)

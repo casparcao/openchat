@@ -9,10 +9,7 @@ import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.core.serialize.MsgBuilder;
 import top.mikecao.openchat.core.serialize.Result;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static top.mikecao.openchat.client.config.Constants.CHAT_ENDPOINT;
 
@@ -48,6 +45,7 @@ public class RemoteChatStore implements ChatStore {
                     .setType(chat.getType())
                     .setSpeaker(chat.getSpeaker())
                     .setRoom(chat.getRoom())
+                    .setTs(chat.getTs().getTime())
                     .setMessage(chat.getMessage())
                     .build();
             Proto.Message msg = MsgBuilder.get(Proto.MsgType.SEND)

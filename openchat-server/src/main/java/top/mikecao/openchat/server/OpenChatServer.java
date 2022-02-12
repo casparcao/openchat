@@ -40,7 +40,6 @@ public class OpenChatServer {
 
     private final EventLoopGroup boss = new NioEventLoopGroup(1);
     private final EventLoopGroup work = new NioEventLoopGroup();
-    private final EventExecutorGroup loginExecutorGroup = new DefaultEventExecutorGroup(16);
     private final EventExecutorGroup p2pChatExecutorGroup = new DefaultEventExecutorGroup(16);
     private final EventExecutorGroup unreadMsgFetchExecutorGroup = new DefaultEventExecutorGroup(16);
 
@@ -65,7 +64,7 @@ public class OpenChatServer {
     @Autowired
     private AuthFilter authFilter;
     @Autowired
-    private LoginHandler loginHandler;
+    private InitHandler initHandler;
     @Autowired
     private MsgSendHandler msgSendHandler;
     @Autowired
@@ -78,7 +77,7 @@ public class OpenChatServer {
     private MsgFetchHandler msgFetchHandler;
 
     private ChannelInitializer<Channel> channelInitializer(SslContext sslCtx) {
-        return new ChannelInitializer<Channel>() {
+        return new ChannelInitializer<>() {
             @Override
             protected void initChannel(Channel ch) {
                 ch.pipeline()
@@ -89,7 +88,7 @@ public class OpenChatServer {
                         .addLast("ProtobufEncoder", new ProtobufEncoder())
                         .addLast("AuthFilter", authFilter)
                         .addLast(unreadMsgFetchExecutorGroup, "unreadMsgFetchHandler", msgAckHandler)
-                        .addLast(loginExecutorGroup, "LoginHandler", loginHandler)
+                        .addLast(initHandler)
                         .addLast(p2pChatExecutorGroup, "p2pChatHandler", msgSendHandler)
                         .addLast(msgPullHandler)
                         .addLast(msgFetchHandler)
@@ -124,7 +123,6 @@ public class OpenChatServer {
     public void destroy(){
         boss.shutdownGracefully();
         work.shutdownGracefully();
-        loginExecutorGroup.shutdownGracefully();
         p2pChatExecutorGroup.shutdownGracefully();
         try {
             boolean success1 = boss.awaitTermination(60, TimeUnit.SECONDS);

@@ -33,11 +33,11 @@ public class AuthFilter extends SimpleChannelInboundHandler<Proto.Message> {
      @Override
      protected void channelRead0(ChannelHandlerContext ctx, Proto.Message msg) {
           Proto.MsgType type = msg.getType();
-          if(Proto.MsgType.LOGIN.equals(type)){
+          if(Proto.MsgType.INIT.equals(type)){
                ctx.fireChannelRead(msg);
                return;
           }
-          //不是登录事件，则需要判断是否登录，或者token是否有效
+          //不是初始化连接事件，则需要判断是否登录，或者token是否有效
           String token = msg.getToken();
           Account account = granter.resolve(token);
           ctx.channel().attr(AttributeKey.valueOf(AUTH_ATTR_NAME)).set(account);
