@@ -2,8 +2,9 @@ package top.mikecao.openchat.client.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -14,19 +15,18 @@ import top.mikecao.openchat.core.file.Storage;
 import top.mikecao.openchat.core.http.Client;
 import top.mikecao.openchat.core.serialize.Result;
 
-import java.net.*;
-import java.util.ResourceBundle;
-
 import static top.mikecao.openchat.client.config.Constants.LOGIN_ENDPOINT;
 import static top.mikecao.openchat.client.config.Constants.TOKEN_STORE_LOCATION;
 
 /**
  * @author mike
  */
-public class LoginController implements Initializable {
+public class LoginController extends Parent {
 
     @FXML
     public PasswordField txtPassword;
+    @FXML
+    private Label labelClose;
     @FXML
     private TextField txtEmail;
     private MainApplication application;
@@ -56,14 +56,15 @@ public class LoginController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //do nothing
+    public void onMouseEntered() {
+        //...
     }
 
-    public void onMouseEntered(MouseEvent mouseEvent) {
+    public void onMouseExited() {
+        //...
     }
 
-    public void onMouseExited(MouseEvent mouseEvent) {
+    public void onCloseAction() {
+        application.close();
     }
 }

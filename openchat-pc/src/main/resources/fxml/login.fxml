@@ -40,4 +40,7 @@
          </children>
       </AnchorPane>
    </center>
+   <top>
+      <Label fx:id="labelClose" onMouseReleased="#onCloseAction" text="  X  " BorderPane.alignment="TOP_RIGHT" />
+   </top>
 </BorderPane>

@@ -1,8 +1,8 @@
 package top.mikecao.openchat.client;
 
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -56,10 +56,25 @@ public class MainApplication extends javafx.application.Application {
         stage.show();
     }
 
+    private double xOffset = 0;
+    private double yOffset = 0;
+
     public void login(){
         LoginController login = (LoginController) paint("/fxml/login.fxml", 450, 325);
         login.application(this);
     }
+
+    private void dragged(Parent parent) {
+        parent.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        parent.setOnMouseDragged(event -> {
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
+        });
+    }
+
     public void main(String email, Auth auth){
         connector = new Connector();
         connector.connect(auth);
@@ -68,7 +83,7 @@ public class MainApplication extends javafx.application.Application {
         chat.application(this);
     }
 
-    public Initializable paint(String fxml, double width, double height){
+    public Parent paint(String fxml, double width, double height){
         FXMLLoader loader = new FXMLLoader();
         InputStream is = this.getClass().getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -91,6 +106,7 @@ public class MainApplication extends javafx.application.Application {
         Scene scene = new Scene(pane, width, height);
         stage.setScene(scene);
         stage.sizeToScene();
+        dragged(pane);
         return loader.getController();
     }
 
@@ -99,7 +115,9 @@ public class MainApplication extends javafx.application.Application {
     }
 
     public void close(){
-        connector.close();
+        if(Objects.nonNull(connector)){
+            connector.close();
+        }
         stage.close();
     }
 }

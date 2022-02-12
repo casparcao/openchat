@@ -7,7 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -29,7 +29,6 @@ import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.core.serialize.Json;
 import top.mikecao.openchat.core.serialize.Result;
 
-import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.IntStream;
@@ -40,7 +39,7 @@ import static top.mikecao.openchat.client.config.Constants.*;
  * @author mike
  */
 @Slf4j
-public class ChatController implements Initializable {
+public class ChatController extends Parent {
 
     private MainApplication application;
     @FXML
@@ -89,11 +88,6 @@ public class ChatController implements Initializable {
 
     public void account(String account){
         executorService.execute(() -> Platform.runLater(() -> labelAccount.setText(account)));
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //...
     }
 
     private void init() {
