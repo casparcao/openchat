@@ -54,8 +54,7 @@ public class RemoteChatStore implements ChatStore {
                     .build();
             connector.channel().writeAndFlush(msg);
         });
-        Objects.requireNonNull(listeners, "回调函数不可为空")
-                .forEach(cb -> cb.process(there, chats.get(0).getRoom(), chats));
+        listeners.forEach(cb -> cb.process(there, chats.get(0).getRoom(), chats));
     }
 
     @Override
