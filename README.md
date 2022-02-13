@@ -25,9 +25,9 @@
 
 ## 模块
 
-### openchat web
+### openchat rest
 
-- 基于spring webflux
+- 基于spring webflux的restful接口
 - 提供基于http协议的通信，主要用于登录获取token，拉取消息服务器ip
 - 拉取好友关系
 - 拉取消息列表
@@ -39,7 +39,7 @@
 - 消息的离线存储
 - 支持横向扩展
 
-### openchat pc
+### openchat client
 
 - 基于javafx实现的跨pc端客户端
 - 登录
@@ -49,3 +49,12 @@
 
 - 基于protobuf3的序列化协议
 - 通用的工具，实体类
+
+## TODO
+
+1. 注册
+2. 加好友
+3. 掉线重连
+4. 群聊
+5. 消息已读
+6. 服务器注册

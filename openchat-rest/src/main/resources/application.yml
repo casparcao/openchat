@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: openchat-web
+    name: openchat-rest
 
 logging:
   level:

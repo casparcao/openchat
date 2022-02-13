@@ -18,9 +18,9 @@
 
     <modules>
         <module>openchat-server</module>
-        <module>openchat-pc</module>
+        <module>openchat-client</module>
         <module>openchat-core</module>
-        <module>openchat-web</module>
+        <module>openchat-rest</module>
     </modules>
     <properties>
         <java.version>15</java.version>

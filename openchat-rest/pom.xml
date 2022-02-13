@@ -11,10 +11,10 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>openchat-web</artifactId>
+  <artifactId>openchat-rest</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>openchat-web</name>
+  <name>openchat-rest</name>
 
   <dependencies>
     <dependency>
