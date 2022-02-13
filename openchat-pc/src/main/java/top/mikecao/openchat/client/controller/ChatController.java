@@ -43,7 +43,7 @@ public class ChatController extends Parent {
 
     private MainApplication application;
     @FXML
-    private ListView<Relation> listViewRelation;
+    private ListView<RelationViewRender.CustomBox> listViewRelation;
     /** 对方姓名*/
     @FXML
     private Label labelThere;
@@ -110,13 +110,15 @@ public class ChatController extends Parent {
             log.error("加载好友信息异常>>" + relations);
             throw new AppServerException("加载好友信息失败");
         }
-        ObservableList<Relation> observableList = FXCollections.observableList(relations.getData());
+        ObservableList<RelationViewRender.CustomBox> observableList
+                = FXCollections.observableList(RelationViewRender.render(relations.getData(), listViewRelation.getWidth()));
         //模拟数据
         listViewRelation.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((ob, oldValue, newValue) -> {
-                    labelThere.setText(newValue.getNickname());
-                    reload(newValue);
+                    labelThere.setText(newValue.relation().getNickname());
+                    labelThere.setGraphic(newValue.avatar());
+                    reload(newValue.relation());
                 });
         Platform.runLater(() -> listViewRelation.setItems(observableList));
     }
@@ -155,7 +157,7 @@ public class ChatController extends Parent {
         String text = txtInput.getText();
         Relation current = listViewRelation.getSelectionModel()
                 .selectedItemProperty()
-                .get();
+                .get().relation();
         Chat chat = new Chat()
                 .setMessage(text)
                 .setRoom(current.getRid())

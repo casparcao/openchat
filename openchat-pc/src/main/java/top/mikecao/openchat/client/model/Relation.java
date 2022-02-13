@@ -18,9 +18,4 @@ public class Relation {
     private boolean group;
     /** 该聊天室中最大消息id max > offset则标识有未读消息*/
     private long max;
-
-    @Override
-    public String toString(){
-        return nickname + (max > offset ? "(" + (max - offset) + ")" : "");
-    }
 }
