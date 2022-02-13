@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class Relation {
-    private String name;
+    private String nickname;
     /** 聊天室id */
     private long rid;
     /** 已读消息最大偏移量 */
@@ -21,6 +21,6 @@ public class Relation {
 
     @Override
     public String toString(){
-        return rid + (max > offset ? "(" + (max - offset) + ")" : "");
+        return nickname + (max > offset ? "(" + (max - offset) + ")" : "");
     }
 }

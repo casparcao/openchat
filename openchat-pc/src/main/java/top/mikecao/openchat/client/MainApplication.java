@@ -14,10 +14,13 @@ import top.mikecao.openchat.client.controller.ChatController;
 import top.mikecao.openchat.client.controller.LoginController;
 import top.mikecao.openchat.core.auth.Auth;
 import top.mikecao.openchat.core.exception.AppServerException;
+import top.mikecao.openchat.core.file.Storage;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
+
+import static top.mikecao.openchat.client.config.Constants.TOKEN_STORE_LOCATION;
 
 /**
  * @author caohailong
@@ -43,14 +46,14 @@ public class MainApplication extends javafx.application.Application {
         //1.1. 尝试使用本地token连接server，如果成功则直接跳转到主页面
         //1.2. 否则，跳转到登录页
         //2. 如果不存在token，跳转到登录页
-        //Auth auth = Storage.load(TOKEN_STORE_LOCATION, Auth.class);
-        //if(Objects.isNull(auth)){
+        Auth auth = Storage.load(TOKEN_STORE_LOCATION, Auth.class);
+        if(Objects.isNull(auth)){
             //无本地token，跳到登录页进行初次登录
             login();
-        //}else{
+        }else{
             //存在，尝试连接服务器，连接成功直接跳转主页面
-            //main("a@b.com", auth);
-        //}
+            main("a@b.com", auth);
+        }
         stage.getIcons().add(new Image(
                 Objects.requireNonNull(MainApplication.class.getResourceAsStream("/image/logo.png"))));
         stage.show();

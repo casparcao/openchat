@@ -1,0 +1,10 @@
+#labelContent{
+    -fx-background-color: rgb(201,231,255);
+    -fx-border-radius: 4 4 4 4;
+    -fx-background-radius: 4 4 4 4;
+    -fx-padding: 10;
+}
+
+#labelName {
+    -fx-text-fill: gray;
+}

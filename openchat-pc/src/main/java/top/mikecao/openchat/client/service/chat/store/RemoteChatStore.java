@@ -44,6 +44,7 @@ public class RemoteChatStore implements ChatStore {
             Proto.Chat c = Proto.Chat.newBuilder()
                     .setType(chat.getType())
                     .setSpeaker(chat.getSpeaker())
+                    .setNickname(chat.getNickname())
                     .setRoom(chat.getRoom())
                     .setTs(chat.getTs().getTime())
                     .setMessage(chat.getMessage())

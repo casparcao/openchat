@@ -27,6 +27,8 @@ public class Chat {
      */
     @Indexed
     private long speaker;
+    /** 消息发送人的昵称 */
+    private String nickname;
     /**
      * 聊天室ID
      */

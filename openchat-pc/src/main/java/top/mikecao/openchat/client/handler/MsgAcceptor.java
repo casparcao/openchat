@@ -35,6 +35,7 @@ public class MsgAcceptor extends SimpleChannelInboundHandler<Proto.Message> {
                 .setId(0)
                 .setMessage(chat.getMessage())
                 .setSpeaker(chat.getSpeaker())
+                .setNickname(chat.getNickname())
                 .setRoom(chat.getRoom())
                 .setTs(ts)
                 .setType(chat.getType());

@@ -4,19 +4,20 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
 import top.mikecao.openchat.client.MainApplication;
 import top.mikecao.openchat.client.model.Chat;
 import top.mikecao.openchat.client.model.Relation;
 import top.mikecao.openchat.client.service.chat.ChatStore;
-import top.mikecao.openchat.client.service.chat.listener.ChatTableUpdater;
+import top.mikecao.openchat.client.service.chat.listener.ChatViewUpdater;
 import top.mikecao.openchat.client.service.chat.store.RemoteChatStore;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.Auth;
@@ -31,7 +32,6 @@ import top.mikecao.openchat.core.serialize.Result;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.IntStream;
 
 import static top.mikecao.openchat.client.config.Constants.*;
 
@@ -43,7 +43,7 @@ public class ChatController extends Parent {
 
     private MainApplication application;
     @FXML
-    private ListView<Relation> friendsListView;
+    private ListView<Relation> listViewRelation;
     /** 对方姓名*/
     @FXML
     private Label labelThere;
@@ -54,17 +54,15 @@ public class ChatController extends Parent {
     private Label labelClose;
     /** 聊天记录 */
     @FXML
-    private TableView<Chat> tableMessages;
-    @FXML
-    private TableColumn<String, String> columnMessage;
+    private ListView<HBox> listViewMessage;
     /** 正在输入的内容 */
     @FXML
-    private TextArea txtContent;
+    private TextArea txtInput;
     /** 发送按钮 */
     @FXML
     private Button btnSend;
     /** 消息记录列表数据源 ，每个key对应一个房间*/
-    private final Map<Long, ObservableList<Chat>> messages = new HashMap<>(32);
+    private final Map<Long, ObservableList<HBox>> messages = new HashMap<>(32);
     private ChatStore chatStore;
     private final TokenGranter tokenGranter = new DefaultTokenGranter(Json.mapper());
     private Account account;
@@ -98,9 +96,9 @@ public class ChatController extends Parent {
         }
         chatStore = new RemoteChatStore(this.application.connector(), this.auth.getToken());
         account = tokenGranter.resolve(auth.getToken());
-        ChatTableUpdater chatTableUpdater = new ChatTableUpdater(messages);
+        ChatViewUpdater chatViewUpdater = new ChatViewUpdater(messages, listViewMessage.getWidth());
         //配置消息存储器
-        chatStore.listener(chatTableUpdater);
+        chatStore.listener(chatViewUpdater);
         this.application.connector().store(chatStore);
     }
 
@@ -114,31 +112,35 @@ public class ChatController extends Parent {
         }
         ObservableList<Relation> observableList = FXCollections.observableList(relations.getData());
         //模拟数据
-        IntStream.range(0, 50).forEach(i -> observableList.add(new Relation().setRid(i).setName(i+"")));
-        friendsListView.getSelectionModel()
+        listViewRelation.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((ob, oldValue, newValue) -> {
-                    labelThere.setText(newValue.getName());
+                    labelThere.setText(newValue.getNickname());
                     reload(newValue);
                 });
-        Platform.runLater(() -> friendsListView.setItems(observableList));
+        Platform.runLater(() -> listViewRelation.setItems(observableList));
     }
 
     private void reload(Relation relation){
         //获取当前好友的绑定列表，如果不存在，创建新列表
-        ObservableList<Chat> observableList
+        ObservableList<HBox> observableList
                 = messages.compute(relation.getRid(), (key, exists) -> {
             if(Objects.isNull(exists)){
                 //初次加载，加载最新20条聊天消息
                 List<Chat> chats
                         = chatStore.load(relation.getRid(), 0L, 20L);
-                return FXCollections.observableList(new ArrayList<>(chats));
+                return FXCollections.observableList(MsgViewRender.render(account, chats, listViewMessage.getWidth()));
             }
             return exists;
         });
         Platform.runLater(() -> {
-            columnMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
-            tableMessages.setItems(observableList);
+            listViewMessage.getStylesheets().add("/style/msglistview.css");
+            listViewMessage.setItems(observableList);
+            listViewMessage.getItems().addListener((ListChangeListener<HBox>) change -> {
+                while(change.next()) {
+                    listViewMessage.scrollTo(change.getTo());
+                }
+            });
         });
     }
 
@@ -150,17 +152,18 @@ public class ChatController extends Parent {
 
     public void onChatSubmit(MouseEvent mouseEvent){
         log.info("发送按钮触发>>" + mouseEvent.getEventType().getName());
-        String text = txtContent.getText();
-        Relation current = friendsListView.getSelectionModel()
+        String text = txtInput.getText();
+        Relation current = listViewRelation.getSelectionModel()
                 .selectedItemProperty()
                 .get();
         Chat chat = new Chat()
                 .setMessage(text)
                 .setRoom(current.getRid())
                 .setSpeaker(account.getId())
+                .setNickname(account.getNickname())
                 .setTs(new Date())
                 .setType(Proto.ChatType.TEXT);
         chatStore.store(false, chat);
-        txtContent.setText("");
+        txtInput.setText("");
     }
 }

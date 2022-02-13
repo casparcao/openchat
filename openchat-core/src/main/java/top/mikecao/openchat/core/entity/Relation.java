@@ -28,6 +28,8 @@ public class Relation {
     private long fid;
     /** 聊天室id */
     private long rid;
+    /** 聊天室昵称，好友昵称，或者群组名称 */
+    private String nickname;
     /** 是否是群聊 */
     private boolean group;
     /** 加入时间 */

@@ -49,6 +49,7 @@ public class MsgSendHandler extends SimpleChannelInboundHandler<Proto.Message> {
                 .setMessage(pc.getMessage())
                 .setType(pc.getType())
                 .setSpeaker(pc.getSpeaker())
+                .setNickname(pc.getNickname())
                 .setRoom(pc.getRoom())
                 .setTs(new Date());
         // 1. 将消息保存到消息库

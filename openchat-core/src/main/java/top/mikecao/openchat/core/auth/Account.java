@@ -12,6 +12,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class Account {
     private long id;
-    /** 邮箱或者唯一账号 */
-    private String username;
+    private String nickname;
 }

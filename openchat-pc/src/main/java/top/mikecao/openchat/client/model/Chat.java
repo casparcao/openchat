@@ -19,6 +19,8 @@ public class Chat {
      * 消息发送人
      */
     private long speaker;
+    /** 发送人姓名 */
+    private String nickname;
     /**
      * 聊天室ID
      */
@@ -26,8 +28,4 @@ public class Chat {
     private Proto.ChatType type;
     private String message;
     private Date ts;
-
-    public String getMessage(){
-        return speaker + "(" + Strings.format(ts) + ") : " + message;
-    }
 }

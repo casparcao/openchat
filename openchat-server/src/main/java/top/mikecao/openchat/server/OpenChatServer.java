@@ -40,8 +40,8 @@ public class OpenChatServer {
 
     private final EventLoopGroup boss = new NioEventLoopGroup(1);
     private final EventLoopGroup work = new NioEventLoopGroup();
-    private final EventExecutorGroup p2pChatExecutorGroup = new DefaultEventExecutorGroup(16);
-    private final EventExecutorGroup unreadMsgFetchExecutorGroup = new DefaultEventExecutorGroup(16);
+    private final EventExecutorGroup msgSendExecutorGroup = new DefaultEventExecutorGroup(16);
+    private final EventExecutorGroup msgAckExecutorGroup = new DefaultEventExecutorGroup(16);
 
     @PostConstruct
     public void start() throws CertificateException,
@@ -87,9 +87,9 @@ public class OpenChatServer {
                         .addLast("FrameEncoder", new ProtobufVarint32LengthFieldPrepender())
                         .addLast("ProtobufEncoder", new ProtobufEncoder())
                         .addLast("AuthFilter", authFilter)
-                        .addLast(unreadMsgFetchExecutorGroup, "unreadMsgFetchHandler", msgAckHandler)
+                        .addLast(msgAckExecutorGroup, "msgAckHandler", msgAckHandler)
                         .addLast(initHandler)
-                        .addLast(p2pChatExecutorGroup, "p2pChatHandler", msgSendHandler)
+                        .addLast(msgSendExecutorGroup, "msgSendHandler", msgSendHandler)
                         .addLast(msgPullHandler)
                         .addLast(msgFetchHandler)
                         .addLast("exceptionHandler", exceptionHandler);
@@ -123,7 +123,7 @@ public class OpenChatServer {
     public void destroy(){
         boss.shutdownGracefully();
         work.shutdownGracefully();
-        p2pChatExecutorGroup.shutdownGracefully();
+        msgSendExecutorGroup.shutdownGracefully();
         try {
             boolean success1 = boss.awaitTermination(60, TimeUnit.SECONDS);
             boolean success2 = work.awaitTermination(60, TimeUnit.SECONDS);

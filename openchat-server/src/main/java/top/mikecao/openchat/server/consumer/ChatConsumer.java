@@ -54,6 +54,7 @@ public class ChatConsumer {
                 .setType(chat.getType())
                 .setRoom(chat.getRoom())
                 .setSpeaker(chat.getSpeaker())
+                .setNickname(chat.getNickname())
                 .setMessage(chat.getMessage())
                 .setTs(chat.getTs().getTime())
                 .build();

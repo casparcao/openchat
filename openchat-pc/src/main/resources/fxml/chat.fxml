@@ -4,8 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
@@ -23,7 +21,7 @@
             </Label>
          </top>
          <center>
-            <ListView fx:id="friendsListView" prefHeight="266.0" prefWidth="173.0" BorderPane.alignment="CENTER" />
+            <ListView fx:id="listViewRelation" prefHeight="266.0" prefWidth="173.0" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </left>
@@ -36,17 +34,10 @@
                </items>
             </ToolBar>
          </top>
-         <center>
-            <TableView fx:id="tableMessages" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-              <columns>
-                <TableColumn fx:id="columnMessage" prefWidth="425.94958622695896" />
-              </columns>
-            </TableView>
-         </center>
          <bottom>
             <VBox prefHeight="134.0" prefWidth="436.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextArea fx:id="txtContent" prefHeight="101.0" prefWidth="465.0" />
+                  <TextArea fx:id="txtInput" prefHeight="101.0" prefWidth="465.0" />
                   <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
                     <items>
                       <Button fx:id="btnSend" mnemonicParsing="false" onMouseReleased="#onChatSubmit" text="发送" />
@@ -55,6 +46,9 @@
                </children>
             </VBox>
          </bottom>
+         <center>
+            <ListView fx:id="listViewMessage" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </center>
       </BorderPane>
    </center>
    <top>
