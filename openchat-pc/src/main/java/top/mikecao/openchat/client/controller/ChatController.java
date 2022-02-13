@@ -10,6 +10,11 @@ import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +36,7 @@ import top.mikecao.openchat.core.serialize.Json;
 import top.mikecao.openchat.core.serialize.Result;
 
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.*;
 
 import static top.mikecao.openchat.client.config.Constants.*;
@@ -84,22 +90,34 @@ public class ChatController extends Parent {
         });
     }
 
-    public void account(String account){
-        executorService.execute(() -> Platform.runLater(() -> labelAccount.setText(account)));
-    }
-
     private void init() {
         auth = Storage.load(TOKEN_STORE_LOCATION, Auth.class);
         if(Objects.isNull(auth)){
             log.error("无Token信息");
             throw new AppServerException("无认证信息");
         }
-        chatStore = new RemoteChatStore(this.application.connector(), this.auth.getToken());
         account = tokenGranter.resolve(auth.getToken());
+        avatar();
+        chatStore = new RemoteChatStore(this.application.connector(), this.auth.getToken());
         ChatViewUpdater chatViewUpdater = new ChatViewUpdater(messages, listViewMessage.getWidth());
         //配置消息存储器
         chatStore.listener(chatViewUpdater);
         this.application.connector().store(chatStore);
+        this.application.connector().account(account);
+    }
+
+    private void avatar() {
+        Platform.runLater(() -> {
+            //个人头像
+            Image image
+                    = new Image(Objects.requireNonNull(
+                    ChatController.class.getResourceAsStream("/image/" + account.getAvatar())));
+            ImageView iv = new ImageView(image);
+            iv.setFitWidth(24);
+            iv.setFitHeight(24);
+            labelAccount.setText(account.getNickname());
+            labelAccount.setGraphic(iv);
+        });
     }
 
     /** 加载好友列表 */
@@ -117,7 +135,10 @@ public class ChatController extends Parent {
                 .selectedItemProperty()
                 .addListener((ob, oldValue, newValue) -> {
                     labelThere.setText(newValue.relation().getNickname());
-                    labelThere.setGraphic(newValue.avatar());
+                    ImageView image = new ImageView(newValue.avatar());
+                    image.setFitHeight(32);
+                    image.setFitWidth(32);
+                    labelThere.setGraphic(image);
                     reload(newValue.relation());
                 });
         Platform.runLater(() -> listViewRelation.setItems(observableList));

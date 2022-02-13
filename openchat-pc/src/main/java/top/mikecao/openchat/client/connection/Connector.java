@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import top.mikecao.openchat.client.handler.InitHandler;
 import top.mikecao.openchat.client.handler.MsgAcceptor;
 import top.mikecao.openchat.client.service.chat.ChatStore;
+import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.Auth;
 import top.mikecao.openchat.core.exception.AppServerException;
 import top.mikecao.openchat.core.proto.Proto;
@@ -107,6 +108,9 @@ public class Connector {
 
     public void store(ChatStore store){
         this.acceptor.store(store);
+    }
+    public void account(Account account){
+        this.acceptor.account(account);
     }
 
     public void close(){

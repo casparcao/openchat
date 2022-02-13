@@ -36,7 +36,8 @@ public class AuthService {
                     //生成token，并返回客户端
                     tokenGranter.grant(new Account()
                             .setId(user.getId())
-                            .setNickname(user.getNickname())))
+                            .setNickname(user.getNickname())
+                            .setAvatar(user.getAvatar())))
                 //查询注册的聊天服务器的路由信息
                 .zipWith(registry.fetch())
                 .map(x ->

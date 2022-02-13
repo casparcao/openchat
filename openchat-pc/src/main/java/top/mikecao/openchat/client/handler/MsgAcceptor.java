@@ -5,6 +5,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import top.mikecao.openchat.client.model.Chat;
 import top.mikecao.openchat.client.service.chat.ChatStore;
+import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.proto.Proto;
 
 import java.util.Date;
@@ -17,9 +18,14 @@ import java.util.Date;
 public class MsgAcceptor extends SimpleChannelInboundHandler<Proto.Message> {
 
     private ChatStore store;
+    /** 当前登录账号 */
+    private Account account;
 
     public void store(ChatStore store){
         this.store = store;
+    }
+    public void account(Account account){
+        this.account = account;
     }
 
     @Override
@@ -29,6 +35,10 @@ public class MsgAcceptor extends SimpleChannelInboundHandler<Proto.Message> {
             return;
         }
         Proto.Chat chat = msg.getPush().getChat();
+        if(chat.getSpeaker() == account.getId()){
+            //本人的消息不再处理
+            return;
+        }
         Date ts = new Date();
         ts.setTime(chat.getTs());
         Chat c = new Chat()

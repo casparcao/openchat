@@ -13,4 +13,5 @@ import lombok.experimental.Accessors;
 public class Account {
     private long id;
     private String nickname;
+    private String avatar;
 }

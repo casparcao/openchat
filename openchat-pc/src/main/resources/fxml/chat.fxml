@@ -14,7 +14,7 @@
    <left>
       <BorderPane BorderPane.alignment="CENTER">
          <top>
-            <Label fx:id="labelAccount" text="本人姓名" BorderPane.alignment="CENTER">
+            <Label fx:id="labelAccount" text="头像" BorderPane.alignment="CENTER_LEFT">
                <font>
                   <Font size="16.0" />
                </font>

@@ -67,7 +67,7 @@ public final class RelationViewRender {
         vbox.getChildren().addAll(name, content);
 
         //最外层，横向box，头像，聊天内容，姓名，时间
-        CustomBox box = new CustomBox(relation, avatar);
+        CustomBox box = new CustomBox(relation, avatar.getImage());
         box.setAlignment(Pos.CENTER_LEFT);
         box.getChildren().addAll(avatar, vbox);
         return box;
@@ -75,8 +75,8 @@ public final class RelationViewRender {
 
     public static class CustomBox extends HBox {
         private final Relation relation;
-        private final ImageView avatar;
-        public CustomBox(Relation relation, ImageView avatar){
+        private final Image avatar;
+        public CustomBox(Relation relation, Image avatar){
            super();
            this.relation = relation;
            this.avatar = avatar;
@@ -86,7 +86,7 @@ public final class RelationViewRender {
             return relation;
         }
 
-        public ImageView avatar(){
+        public Image avatar(){
             return avatar;
         }
     }

@@ -46,7 +46,7 @@ public class LoginController extends Parent {
         Result<Auth> result = Client.post(LOGIN_ENDPOINT, login, new TypeReference<>() {});
         if(result.success()){
             Storage.store(TOKEN_STORE_LOCATION, result.getData());
-            application.main(email, result.getData());
+            application.main(result.getData());
         }else{
             //提示密码错误
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
