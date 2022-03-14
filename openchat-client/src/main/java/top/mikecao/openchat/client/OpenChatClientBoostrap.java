@@ -8,7 +8,7 @@ import top.mikecao.openchat.client.controller.MainApplication;
  * @author caohailong
  */
 
-public class OpenChatBoostrap {
+public class OpenChatClientBoostrap {
     public static void main(String[] args) {
         Application.launch(MainApplication.class, args);
     }

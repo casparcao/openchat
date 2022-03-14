@@ -122,7 +122,14 @@ public class MainApplication extends javafx.application.Application {
         return this.connector;
     }
 
+    private volatile boolean closed = false;
+
+    public boolean closed(){
+        return this.closed;
+    }
+
     public void close(){
+        this.closed = true;
         if(Objects.nonNull(connector)){
             connector.close();
         }

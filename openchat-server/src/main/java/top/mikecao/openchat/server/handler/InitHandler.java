@@ -26,7 +26,6 @@ public class InitHandler extends SimpleChannelInboundHandler<Proto.Message> {
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Proto.Message msg) {
         Proto.MsgType type = msg.getType();
-        System.out.println("init handler>>" + type);
         //不是登录事件，不做处理
         if(!Proto.MsgType.INIT.equals(type)){
             ctx.fireChannelRead(msg);

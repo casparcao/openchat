@@ -79,6 +79,10 @@ public class Connector {
     }
 
     public void connect() {
+        //应用已关闭，不进行连接
+        if(this.application.closed()){
+            return;
+        }
         //如果链接失败，则开始重试，最大尝试n次， 每次间隔m秒
         //失败后刷新ui展示x秒后重试
         //最大尝试次数
@@ -93,9 +97,8 @@ public class Connector {
                 List<Server> servers = rls.or(Collections.emptyList());
                 for (Server server : servers) {
                     //依次尝试每个server
-                    Channel ch = connect0(server.getIp(), server.getPort());
-                    if (Objects.nonNull(ch)) {
-                        this.channel = ch;
+                    this.channel = connect0(server.getIp(), server.getPort());
+                    if (Objects.nonNull(this.channel)) {
                         break;
                     }
                 }
@@ -117,7 +120,7 @@ public class Connector {
     private Channel connect0(String host, int port){
         Channel ch = null;
         try{
-            ChannelFuture future = bootstrap.connect(host, port).sync();
+            ChannelFuture future = bootstrap.connect(host, port);
             boolean success = future.await(3, TimeUnit.SECONDS);
             if(success) {
                 ch = future.channel();
@@ -125,8 +128,11 @@ public class Connector {
         }catch (InterruptedException e){
             log.error("连接服务器失败>>", e);
             Thread.currentThread().interrupt();
+            return null;
         }
-        return ch;
+        return Objects.nonNull(ch) && ch.isActive()
+                ? ch
+                : null;
     }
 
     private Bootstrap bootstrap() {
@@ -164,7 +170,9 @@ public class Connector {
     }
 
     public void close(){
-        this.channel.close().syncUninterruptibly();
+        if (Objects.nonNull(this.channel)) {
+            this.channel.close().syncUninterruptibly();
+        }
         this.worker.shutdownGracefully();
     }
 

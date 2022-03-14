@@ -5,16 +5,14 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import top.mikecao.openchat.core.proto.Proto;
-import top.mikecao.openchat.core.serialize.MsgBuilder;
-
-import java.util.Date;
 
 /**
  * @author caohailong
  */
 
+@Slf4j
 @Component
 @ChannelHandler.Sharable
 public class HeartBeatHandler extends ChannelDuplexHandler {
@@ -25,20 +23,16 @@ public class HeartBeatHandler extends ChannelDuplexHandler {
             IdleStateEvent e = (IdleStateEvent) evt;
             if (e.state() == IdleState.READER_IDLE) {
                 //如果一段时间内没有收到客户端消息，则认为连接已断开
-                System.out.println("server reader idle>>" + new Date());
+                log.info("长时间未检测到客户端的心跳，主动断开连接>>" + ctx.channel().id().asLongText());
                 ctx.close();
-            } else if (e.state() == IdleState.WRITER_IDLE) {
-                //每隔一定时间发送一次ping消息
-                System.out.println("server write idle" + new Date());
-                ctx.writeAndFlush(MsgBuilder.get(Proto.MsgType.INIT).build());
             }
         }
-        ctx.fireUserEventTriggered(evt);
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("server channel read>>" + new Date());
-        super.channelRead(ctx, msg);
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        log.error("连接断开>>" + ctx.channel().id().asLongText());
+        super.channelInactive(ctx);
     }
+
 }
