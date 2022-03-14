@@ -18,7 +18,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import lombok.extern.slf4j.Slf4j;
-import top.mikecao.openchat.client.MainApplication;
 import top.mikecao.openchat.client.model.Chat;
 import top.mikecao.openchat.client.model.Relation;
 import top.mikecao.openchat.client.service.chat.ChatStore;

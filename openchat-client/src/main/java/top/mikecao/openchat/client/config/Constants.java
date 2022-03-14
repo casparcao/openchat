@@ -16,6 +16,8 @@ public final class Constants {
 
     public static final String LOGIN_ENDPOINT = WEB_SERVER_HOST + "/login";
 
+    public static final String SERVER_ENDPOINT = WEB_SERVER_HOST + "/servers";
+
     public static final String ROOM_ENDPOINT = WEB_SERVER_HOST + "/rooms";
 
     public static final String CHAT_ENDPOINT = WEB_SERVER_HOST + "/chats";

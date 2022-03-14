@@ -29,10 +29,6 @@ public final class Client {
             .connectTimeout(Duration.ofSeconds(3))
             .build();
 
-    public static HttpClient instance(){
-        return INSTANCE;
-    }
-
     public static <T> T post(String uri, Object payload, TypeReference<T> type){
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))

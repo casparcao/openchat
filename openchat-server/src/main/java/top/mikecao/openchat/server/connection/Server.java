@@ -1,4 +1,4 @@
-package top.mikecao.openchat.server;
+package top.mikecao.openchat.server.connection;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -10,12 +10,14 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import top.mikecao.openchat.core.common.Constants;
 import top.mikecao.openchat.core.proto.Proto;
 import top.mikecao.openchat.core.ssl.KeyCertStore;
 import top.mikecao.openchat.server.filter.AuthFilter;
@@ -36,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
-public class OpenChatServer {
+public class Server {
 
     private final EventLoopGroup boss = new NioEventLoopGroup(1);
     private final EventLoopGroup work = new NioEventLoopGroup();
@@ -75,17 +77,21 @@ public class OpenChatServer {
     private MsgPullHandler msgPullHandler;
     @Autowired
     private MsgFetchHandler msgFetchHandler;
+    @Autowired
+    private HeartBeatHandler heartBeatHandler;
 
     private ChannelInitializer<Channel> channelInitializer(SslContext sslCtx) {
         return new ChannelInitializer<>() {
             @Override
             protected void initChannel(Channel ch) {
                 ch.pipeline()
+                        .addLast("idleStateHandler", new IdleStateHandler(Constants.READER_IDLE_TIME, 0, 0))
                         .addLast("SslHandler", sslCtx.newHandler(ch.alloc()))
                         .addLast("FrameDecoder", new ProtobufVarint32FrameDecoder())
                         .addLast("ProtobufDecoder", new ProtobufDecoder(Proto.Message.getDefaultInstance()))
                         .addLast("FrameEncoder", new ProtobufVarint32LengthFieldPrepender())
                         .addLast("ProtobufEncoder", new ProtobufEncoder())
+                        .addLast("heartBeatHandler", heartBeatHandler)
                         .addLast("AuthFilter", authFilter)
                         .addLast(msgAckExecutorGroup, "msgAckHandler", msgAckHandler)
                         .addLast(initHandler)

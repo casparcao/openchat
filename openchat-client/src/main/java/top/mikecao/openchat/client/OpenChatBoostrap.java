@@ -2,6 +2,7 @@ package top.mikecao.openchat.client;
 
 
 import javafx.application.Application;
+import top.mikecao.openchat.client.controller.MainApplication;
 
 /**
  * @author caohailong

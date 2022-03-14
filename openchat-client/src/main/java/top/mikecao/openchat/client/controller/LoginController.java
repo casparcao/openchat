@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import top.mikecao.openchat.client.MainApplication;
 import top.mikecao.openchat.client.payload.Login;
 import top.mikecao.openchat.core.auth.Auth;
 import top.mikecao.openchat.core.file.Storage;

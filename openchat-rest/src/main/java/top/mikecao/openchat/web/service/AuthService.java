@@ -7,7 +7,6 @@ import top.mikecao.openchat.core.entity.User;
 import top.mikecao.openchat.core.serialize.Result;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.auth.TokenGranter;
-import top.mikecao.openchat.core.registry.Registry;
 import top.mikecao.openchat.web.cmd.LoginCmd;
 import top.mikecao.openchat.web.repository.SimpleUserRepository;
 import top.mikecao.openchat.core.auth.Auth;
@@ -23,8 +22,6 @@ public class AuthService {
     private SimpleUserRepository simpleUserRepository;
     @Autowired
     private TokenGranter tokenGranter;
-    @Autowired
-    private Registry registry;
 
     public Mono<Result<Auth>> auth(LoginCmd command){
         //1. 校验身份，通过，颁发令牌
@@ -34,16 +31,11 @@ public class AuthService {
         return mono.filter(user -> validate(user, command.getPassword()))
                 .map(user ->
                     //生成token，并返回客户端
-                    tokenGranter.grant(new Account()
-                            .setId(user.getId())
-                            .setNickname(user.getNickname())
-                            .setAvatar(user.getAvatar())))
-                //查询注册的聊天服务器的路由信息
-                .zipWith(registry.fetch())
-                .map(x ->
-                    Result.ok(new Auth()
-                            .setToken(x.getT1())
-                            .setServers(x.getT2())))
+                    Result.ok(new Auth().setToken(
+                            tokenGranter.grant(new Account()
+                                    .setId(user.getId())
+                                    .setNickname(user.getNickname())
+                                    .setAvatar(user.getAvatar())))))
                 .switchIfEmpty(Mono.just(Result.error("用户名或者密码错误")));
     }
 

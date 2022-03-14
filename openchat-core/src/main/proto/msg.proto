@@ -28,6 +28,7 @@ enum MsgType {
     ACK = 3; //接收到并阅读了消息
     PULL = 4; //拉取未读的消息
     ERR = 5; //异常消息
+    PING = 6;//心跳消息
 }
 
 message Ack {

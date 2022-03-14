@@ -1,26 +1,23 @@
-package top.mikecao.openchat.client;
+package top.mikecao.openchat.client.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import top.mikecao.openchat.client.connection.Connector;
-import top.mikecao.openchat.client.controller.ChatController;
-import top.mikecao.openchat.client.controller.LoginController;
 import top.mikecao.openchat.core.auth.Auth;
 import top.mikecao.openchat.core.exception.AppServerException;
-import top.mikecao.openchat.core.file.Storage;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
-
-import static top.mikecao.openchat.client.config.Constants.TOKEN_STORE_LOCATION;
 
 /**
  * @author caohailong
@@ -42,6 +39,15 @@ public class MainApplication extends javafx.application.Application {
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setMinWidth(MINIMUM_WINDOW_WIDTH);
         stage.setMinHeight(MINIMUM_WINDOW_HEIGHT);
+
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) ->
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.titleProperty().set("异常");
+                alert.contentTextProperty().set(throwable.getMessage());
+                alert.showAndWait();
+            })
+        );
         //1. 检查本地是否存在token，以及server列表，如果存在直接使用
         //1.1. 尝试使用本地token连接server，如果成功则直接跳转到主页面
         //1.2. 否则，跳转到登录页
@@ -79,8 +85,8 @@ public class MainApplication extends javafx.application.Application {
     }
 
     public void main(Auth auth){
-        connector = new Connector();
-        connector.connect(auth);
+        connector = new Connector(auth.getToken(), this);
+        connector.connect();
         ChatController chat = (ChatController) paint("/fxml/chat.fxml", 800, 600);
         chat.application(this);
     }
@@ -121,5 +127,6 @@ public class MainApplication extends javafx.application.Application {
             connector.close();
         }
         stage.close();
+        Platform.exit();
     }
 }

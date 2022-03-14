@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 
 @SpringBootApplication
-public class OpenChatBootstrap {
+public class OpenChatServerBootstrap {
     public static void main(String[] args) {
-        SpringApplication.run(OpenChatBootstrap.class, args);
+        SpringApplication.run(OpenChatServerBootstrap.class, args);
     }
 }
