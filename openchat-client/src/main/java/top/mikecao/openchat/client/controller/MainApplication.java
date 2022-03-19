@@ -80,7 +80,7 @@ public class MainApplication extends javafx.application.Application {
     public void main(Auth auth){
         connector = new Connector(auth.getToken(), this);
         connector.connect();
-        ChatController chat = FxmlRender.paint(stage, "/fxml/chat.fxml", 800, 600,
+        ChatController chat = FxmlRender.paint(stage, "/fxml/chat.fxml", 600, 550,
                 onMousePressed, onMouseDragged);
         chat.application(this);
     }

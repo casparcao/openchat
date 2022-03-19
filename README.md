@@ -1,5 +1,10 @@
 # openchat
 
+## 录屏
+
+[录屏](./screenshot.mp4)
+[录屏](./screenshot.jpg)
+
 ## 功能列表
 
 1. 支持多种协议，tcp，websocket
