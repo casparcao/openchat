@@ -66,6 +66,8 @@ public class ChatController extends Parent {
     /** 发送按钮 */
     @FXML
     private Button btnSend;
+    @FXML
+    private ImageView imageEmoji;
     /** 消息记录列表数据源 ，每个key对应一个房间*/
     private final Map<Long, ObservableList<HBox>> messages = new HashMap<>(32);
     private ChatStore chatStore;
@@ -140,7 +142,10 @@ public class ChatController extends Parent {
                     labelThere.setGraphic(image);
                     reload(newValue.relation());
                 });
-        Platform.runLater(() -> listViewRelation.setItems(observableList));
+        Platform.runLater(() -> {
+            listViewRelation.setItems(observableList);
+            listViewRelation.getSelectionModel().selectFirst();
+        });
     }
 
     private void reload(Relation relation){
@@ -187,5 +192,11 @@ public class ChatController extends Parent {
                 .setType(Proto.ChatType.TEXT);
         chatStore.store(false, chat);
         txtInput.setText("");
+    }
+
+    public void onSearchEmoji(MouseEvent mouseEvent) {
+        double x = mouseEvent.getScreenX();
+        double y = mouseEvent.getSceneY();
+        EmojiSearcher.display(this.application.stage(), x, y, this.txtInput);
     }
 }

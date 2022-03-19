@@ -6,7 +6,10 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -14,7 +17,7 @@
    <left>
       <BorderPane BorderPane.alignment="CENTER">
          <top>
-            <Label fx:id="labelAccount" text="头像" BorderPane.alignment="CENTER_LEFT">
+            <Label fx:id="labelAccount" text="头像" BorderPane.alignment="CENTER">
                <font>
                   <Font size="16.0" />
                </font>
@@ -37,7 +40,16 @@
          <bottom>
             <VBox prefHeight="134.0" prefWidth="436.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextArea fx:id="txtInput" prefHeight="101.0" prefWidth="465.0" />
+                  <HBox prefHeight="51.0" prefWidth="427.0">
+                     <children>
+                        <ImageView fx:id="imageEmoji" fitHeight="30.0" fitWidth="30.0" onMouseReleased="#onSearchEmoji" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../emoji/image/1f60a.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <TextArea fx:id="txtInput" prefHeight="139.0" prefWidth="427.0" />
                   <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
                     <items>
                       <Button fx:id="btnSend" mnemonicParsing="false" onMouseReleased="#onChatSubmit" text="发送" />
@@ -47,7 +59,7 @@
             </VBox>
          </bottom>
          <center>
-            <ListView fx:id="listViewMessage" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <ListView fx:id="listViewMessage" prefHeight="89.0" prefWidth="427.0" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </center>

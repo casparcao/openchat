@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import top.mikecao.openchat.client.model.Chat;
 import top.mikecao.openchat.core.auth.Account;
 import top.mikecao.openchat.core.common.Strings;
@@ -68,7 +69,7 @@ public final class MsgViewRender {
         avatar.setFitWidth(32);
 
         //聊天内容
-        EmojiTextFlow content = EmojiRender.draw(chat.getMessage());
+        EmojiTextFlow content = EmojiRender.draw(chat.getMessage(), own? TextAlignment.RIGHT: TextAlignment.LEFT);
         content.setId("labelContent");
         content.setMaxWidth(width - 80D);
 

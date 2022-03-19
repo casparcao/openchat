@@ -20,11 +20,12 @@ public final class EmojiRender {
         PARAM = new EmojiTextFlowParameters();
         PARAM.setEmojiScaleFactor(1D);
         PARAM.setTextAlignment(TextAlignment.CENTER);
-        PARAM.setFont(Font.font("微软雅黑", FontWeight.NORMAL, 14));
-        PARAM.setTextColor(Color.DARKGRAY);
+        PARAM.setFont(Font.font("微软雅黑", FontWeight.THIN, 14));
+        PARAM.setTextColor(Color.BLACK);
     }
 
-    public static EmojiTextFlow draw(String content){
+    public static EmojiTextFlow draw(String content, TextAlignment alignment){
+        PARAM.setTextAlignment(alignment);
         EmojiTextFlow etf = new EmojiTextFlow(PARAM);
         etf.parseAndAppend(content);
         return etf;

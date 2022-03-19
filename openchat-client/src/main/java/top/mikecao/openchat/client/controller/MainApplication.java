@@ -1,22 +1,15 @@
 package top.mikecao.openchat.client.controller;
 
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 import top.mikecao.openchat.client.connection.Connector;
 import top.mikecao.openchat.core.auth.Auth;
-import top.mikecao.openchat.core.exception.AppServerException;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
 
 /**
@@ -42,6 +35,7 @@ public class MainApplication extends javafx.application.Application {
 
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) ->
             Platform.runLater(() -> {
+                throwable.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.titleProperty().set("异常");
                 alert.contentTextProperty().set(throwable.getMessage());
@@ -69,53 +63,26 @@ public class MainApplication extends javafx.application.Application {
     private double yOffset = 0;
 
     public void login(){
-        LoginController login = (LoginController) paint("/fxml/login.fxml", 450, 325);
+        LoginController login = FxmlRender.paint(stage, "/fxml/login.fxml", 450, 325,
+                onMousePressed, onMouseDragged);
         login.application(this);
     }
 
-    private void dragged(Parent parent) {
-        parent.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-        parent.setOnMouseDragged(event -> {
-            stage.setX(event.getScreenX() - xOffset);
-            stage.setY(event.getScreenY() - yOffset);
-        });
-    }
+    private final EventHandler<MouseEvent> onMousePressed = event -> {
+        xOffset = event.getSceneX();
+        yOffset = event.getSceneY();
+    };
+    private final EventHandler<MouseEvent> onMouseDragged = event -> {
+        stage.setX(event.getScreenX() - xOffset);
+        stage.setY(event.getScreenY() - yOffset);
+    };
 
     public void main(Auth auth){
         connector = new Connector(auth.getToken(), this);
         connector.connect();
-        ChatController chat = (ChatController) paint("/fxml/chat.fxml", 800, 600);
+        ChatController chat = FxmlRender.paint(stage, "/fxml/chat.fxml", 800, 600,
+                onMousePressed, onMouseDragged);
         chat.application(this);
-    }
-
-    public Parent paint(String fxml, double width, double height){
-        FXMLLoader loader = new FXMLLoader();
-        InputStream is = this.getClass().getResourceAsStream(fxml);
-        loader.setBuilderFactory(new JavaFXBuilderFactory());
-        loader.setLocation(this.getClass().getResource(fxml));
-        BorderPane pane;
-        try {
-            pane = loader.load(is);
-        } catch (IOException e) {
-            log.error("加载FXML失败>>", e);
-            throw new AppServerException("页面加载失败");
-        }finally {
-            try {
-                if (Objects.nonNull(is)) {
-                    is.close();
-                }
-            }catch (IOException e){
-                log.error("流关闭异常>>", e);
-            }
-        }
-        Scene scene = new Scene(pane, width, height);
-        stage.setScene(scene);
-        stage.sizeToScene();
-        dragged(pane);
-        return loader.getController();
     }
 
     public Connector connector(){
@@ -135,5 +102,9 @@ public class MainApplication extends javafx.application.Application {
         }
         stage.close();
         Platform.exit();
+    }
+
+    public Stage stage(){
+        return this.stage;
     }
 }
