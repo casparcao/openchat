@@ -6,6 +6,8 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
@@ -16,20 +18,15 @@
          <children>
             <Label layoutX="97.0" layoutY="127.0" text="用户名" />
             <Label layoutX="103.0" layoutY="182.0" text="密码" />
-            <TextField id="txtEmail" text="a@b.com" fx:id="txtEmail" layoutX="179.0" layoutY="122.0" prefHeight="26.0" prefWidth="200.0" promptText="请输入邮箱">
+            <TextField id="txtEmail" fx:id="txtEmail" layoutX="179.0" layoutY="122.0" prefHeight="26.0" prefWidth="200.0" promptText="请输入邮箱" text="a@b.com">
                <tooltip>
                   <Tooltip text="请输入正确的邮箱" />
                </tooltip></TextField>
-            <PasswordField id="txtPassword" text="88888888" fx:id="txtPassword" layoutX="180.0" layoutY="177.0" prefHeight="26.0" prefWidth="200.0" promptText="请输入密码">
+            <PasswordField id="txtPassword" fx:id="txtPassword" layoutX="180.0" layoutY="177.0" onKeyReleased="#onKeyReleased" prefHeight="26.0" prefWidth="200.0" promptText="请输入密码" text="88888888">
                <tooltip>
                   <Tooltip text="请输入正确的密码" />
                </tooltip></PasswordField>
-            <Label layoutX="14.0" layoutY="14.0" text="open chat">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Button id="btnConfirm" layoutX="337.0" layoutY="234.0" mnemonicParsing="false" onMouseReleased="#onMouseReleased" text="确认" />
+            <Button id="btnConfirm" layoutX="337.0" layoutY="234.0" mnemonicParsing="false" onKeyReleased="#onKeyReleased" onMouseReleased="#login" text="确认" />
             <Hyperlink layoutX="263.0" layoutY="235.0" text="注册" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="576.0" layoutY="4.0" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" prefHeight="19.0" prefWidth="19.0" text="X" textAlignment="CENTER" />
             <Label layoutX="207.0" layoutY="61.0" text="登录">
@@ -37,6 +34,11 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <ImageView fitHeight="45.0" fitWidth="45.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../image/logo.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </center>

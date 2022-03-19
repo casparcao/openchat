@@ -7,6 +7,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import top.mikecao.openchat.client.payload.Login;
 import top.mikecao.openchat.core.auth.Auth;
@@ -34,7 +36,7 @@ public class LoginController extends Parent {
     }
 
     @FXML
-    public void onMouseReleased(MouseEvent event){
+    public void login(MouseEvent event){
         //尝试登录
         String email = txtEmail.getText();
         String passwd = txtPassword.getText();
@@ -61,6 +63,13 @@ public class LoginController extends Parent {
 
     public void onMouseExited() {
         //...
+    }
+
+    @FXML
+    public void onKeyReleased(KeyEvent event){
+        if(KeyCode.ENTER.equals(event.getCode())){
+            login(null);
+        }
     }
 
     public void onCloseAction() {
