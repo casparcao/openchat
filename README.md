@@ -1,10 +1,5 @@
 # openchat
 
-## 录屏
-
-![录屏](https://raw.githubusercontent.com/casparcao/openchat/master/screenshot.gif)
-![录屏](https://raw.githubusercontent.com/casparcao/openchat/master/screenshot.jpg)
-
 ## 功能列表
 
 1. 支持多种协议，tcp，websocket
@@ -73,3 +68,8 @@
 3. 离线消息存储
 4. 掉线重连
 5. 支持emoji
+
+## 录屏
+
+![录屏](https://raw.githubusercontent.com/casparcao/openchat/master/screenshot.gif)
+![录屏](https://raw.githubusercontent.com/casparcao/openchat/master/screenshot.jpg)
