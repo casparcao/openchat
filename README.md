@@ -2,8 +2,8 @@
 
 ## 录屏
 
-[录屏](./screenshot.mp4)
-[录屏](./screenshot.jpg)
+![录屏](https://raw.githubusercontent.com/casparcao/openchat/master/screenshot.gif)
+![录屏](https://raw.githubusercontent.com/casparcao/openchat/master/screenshot.jpg)
 
 ## 功能列表
 
