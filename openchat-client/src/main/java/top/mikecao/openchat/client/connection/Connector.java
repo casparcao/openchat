@@ -130,6 +130,7 @@ public class Connector {
             Thread.currentThread().interrupt();
             return null;
         }
+        //如果channel非空，并且channel处于活跃状态才返回，否则返回null
         return Objects.nonNull(ch) && ch.isActive()
                 ? ch
                 : null;

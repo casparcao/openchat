@@ -40,6 +40,18 @@
             <artifactId>javafx-fxml</artifactId>
             <version>17</version>
         </dependency>
+        <dependency>
+            <groupId>com.pavlobu</groupId>
+            <artifactId>javafx-emoji</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/JavaFXEmojiTextFlow_twemoji-1.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.sharegov</groupId>
+            <artifactId>mjson</artifactId>
+            <version>1.4.1</version>
+        </dependency>
     </dependencies>
 
     <build>

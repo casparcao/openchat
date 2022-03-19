@@ -1,5 +1,6 @@
 package top.mikecao.openchat.client.controller;
 
+import com.pavlobu.emojitextflow.EmojiTextFlow;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -67,11 +68,9 @@ public final class MsgViewRender {
         avatar.setFitWidth(32);
 
         //聊天内容
-        Label content = new Label();
+        EmojiTextFlow content = EmojiRender.draw(chat.getMessage());
         content.setId("labelContent");
-        content.setText(chat.getMessage());
         content.setMaxWidth(width - 80D);
-        content.setWrapText(true);
 
         Label name = new Label();
         name.setId("labelName");
