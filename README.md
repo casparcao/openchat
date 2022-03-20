@@ -1,5 +1,9 @@
 # openchat
 
+## 架构图
+
+![架构图](https://raw.githubusercontent.com/casparcao/openchat/master/architecture.jpg)
+
 ## 功能列表
 
 1. 支持多种协议，tcp，websocket
